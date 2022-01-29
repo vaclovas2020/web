@@ -11,63 +11,47 @@ import (
 func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 	vm.classes = make(map[string]Class)
 	wg := &sync.WaitGroup{}
-	var sourceCodes []string
+	count := 0
 	files, err := ioutil.ReadDir(sourceDir)
 	if err != nil {
 		panic(err.Error())
 	}
+	output := make(chan string)
 	for _, file := range files {
 		if !file.IsDir() {
-			data, err := ioutil.ReadFile(fmt.Sprintf("%v/%v", sourceDir, file.Name()))
-			if err != nil {
-				panic(err.Error())
-			}
-			sourceCodes = append(sourceCodes, string(data))
+			wg.Add(1)
+			go vm.parseFileWorker(wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), ctx, output)
+			count++
 		}
 	}
-	output := make(chan string, len(sourceCodes))
-	errCh := make(chan string, len(sourceCodes))
-	for _, sourceCode := range sourceCodes {
-		wg.Add(1)
-		outputNew := make(chan string)
-		errChNew := make(chan string)
-		go vm.parseFileWorker(wg, sourceCode, ctx, outputNew, errChNew)
-		select {
-		case <-outputNew:
-			output <- <-outputNew
-		case <-errChNew:
-			errCh <- <-errChNew
-		}
-	}
-	go vm.monitorWorker(wg, output, errCh)
+	go vm.monitorWorker(wg, output)
 	done := make(chan bool, 1)
-	go vm.printWorker(len(sourceCodes), output, errCh, done)
+	go vm.printWorker(count, output, done)
 	<-done
 }
 
 /* print output and/or error to screen */
-func (vm *VM) printWorker(count int, output <-chan string, errCh <-chan string, done chan<- bool) {
+func (vm *VM) printWorker(count int, output <-chan string, done chan<- bool) {
 	for i := 0; i < count; i++ {
-		select {
-		case <-output:
-			fmt.Println(<-output)
-		case <-errCh:
-			fmt.Println("Fatal error: " + <-errCh)
-		}
+		fmt.Println(<-output)
 	}
 	done <- true
 }
 
 /* wait until all workers finish and close channels */
-func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string, errCh chan<- string) {
+func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string) {
 	wg.Wait()
-	close(errCh)
 	close(output)
 }
 
 /* load source file from disk. Still not yet fully implemented */
-func (vm *VM) parseFileWorker(wg *sync.WaitGroup, sourceCode string, ctx context.Context, output chan<- string, errCh chan<- string) {
+func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, ctx context.Context, output chan<- string) {
 	defer wg.Done()
+	data, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		panic(err.Error())
+	}
+	sourceCode := string(data)
 	output <- sourceCode // Debug info for testing
 	// TODO: parse source and create Class struct array
 }
