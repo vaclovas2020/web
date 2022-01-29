@@ -10,10 +10,11 @@ import (
 /* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
 func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 	wg := &sync.WaitGroup{}
+	var sourceCodes []string
 	output := make(chan string)
 	errCh := make(chan string)
-	files, err := ioutil.ReadDir(sourceDir)
 	parseDone := make(chan bool, 1)
+	files, err := ioutil.ReadDir(sourceDir)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -23,9 +24,12 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 			if err != nil {
 				panic(err.Error())
 			}
-			wg.Add(1)
-			go vm.parseFileWorker(wg, string(data), ctx, output, errCh)
+			sourceCodes = append(sourceCodes, string(data))
 		}
+	}
+	for _, sourceCode := range sourceCodes {
+		wg.Add(1)
+		go vm.parseFileWorker(wg, sourceCode, ctx, output, errCh)
 	}
 	go vm.monitorWorker(wg, output, errCh, parseDone)
 	done := make(chan bool, 1)
