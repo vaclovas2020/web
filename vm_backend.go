@@ -13,5 +13,5 @@ type Class struct {
 
 /* Main VM struct */
 type VM struct {
-	Classes map[string]Class
+	classes map[string]Class
 }
