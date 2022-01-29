@@ -29,7 +29,15 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 	errCh := make(chan string, len(sourceCodes))
 	for _, sourceCode := range sourceCodes {
 		wg.Add(1)
-		go vm.parseFileWorker(wg, sourceCode, ctx, output, errCh)
+		outputNew := make(chan string)
+		errChNew := make(chan string)
+		go vm.parseFileWorker(wg, sourceCode, ctx, outputNew, errChNew)
+		select {
+		case <-outputNew:
+			output <- <-outputNew
+		case <-errChNew:
+			errCh <- <-errChNew
+		}
 	}
 	go vm.monitorWorker(wg, output, errCh)
 	done := make(chan bool, 1)
