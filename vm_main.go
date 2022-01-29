@@ -19,8 +19,12 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 	}
 	for _, file := range files {
 		if !file.IsDir() {
+			data, err := ioutil.ReadFile(file.Name())
+			if err != nil {
+				panic(err.Error())
+			}
 			wg.Add(1)
-			go vm.loadFileWorker(wg, file.Name(), ctx, output, errCh)
+			go vm.parseFileWorker(wg, string(data), ctx, output, errCh)
 		}
 	}
 	go vm.monitorWorker(wg, output, errCh, parseDone)
@@ -52,13 +56,9 @@ func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string, errCh chan
 }
 
 /* load source file from disk. Still not yet fully implemented */
-func (vm *VM) loadFileWorker(wg *sync.WaitGroup, fileName string, ctx context.Context, output chan<- string, errCh chan<- string) {
+func (vm *VM) parseFileWorker(wg *sync.WaitGroup, sourceCode string, ctx context.Context, output chan<- string, errCh chan<- string) {
 	defer wg.Done()
-	data, err := ioutil.ReadFile(fileName)
-	if err != nil {
-		errCh <- err.Error()
-	}
 	vm.classes = make(map[string]Class)
-	output <- string(data) // Debug info for testing
+	output <- sourceCode // Debug info for testing
 	// TODO: parse source and create Class struct array
 }
