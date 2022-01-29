@@ -30,6 +30,7 @@ func wait(wg *sync.WaitGroup, output chan<- string, err chan<- string) {
 
 /* load source file from disk. Still not yet fully implemented */
 func (vm *VM) loadFile(wg *sync.WaitGroup, fileName string, ctx context.Context, output chan<- string, err chan<- string) {
+	defer wg.Done()
 	data, error := ioutil.ReadFile(fileName)
 	if error != nil {
 		err <- error.Error()
