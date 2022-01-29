@@ -12,8 +12,6 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 	vm.classes = make(map[string]Class)
 	wg := &sync.WaitGroup{}
 	var sourceCodes []string
-	output := make(chan string)
-	errCh := make(chan string)
 	files, err := ioutil.ReadDir(sourceDir)
 	if err != nil {
 		panic(err.Error())
@@ -27,6 +25,8 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 			sourceCodes = append(sourceCodes, string(data))
 		}
 	}
+	output := make(chan string, len(sourceCodes))
+	errCh := make(chan string, len(sourceCodes))
 	for _, sourceCode := range sourceCodes {
 		wg.Add(1)
 		go vm.parseFileWorker(wg, sourceCode, ctx, output, errCh)
