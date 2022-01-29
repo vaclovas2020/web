@@ -13,7 +13,6 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 	var sourceCodes []string
 	output := make(chan string)
 	errCh := make(chan string)
-	parseDone := make(chan bool, 1)
 	files, err := ioutil.ReadDir(sourceDir)
 	if err != nil {
 		panic(err.Error())
@@ -31,32 +30,30 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 		wg.Add(1)
 		go vm.parseFileWorker(wg, sourceCode, ctx, output, errCh)
 	}
-	go vm.monitorWorker(wg, output, errCh, parseDone)
+	go vm.monitorWorker(wg, output, errCh)
 	done := make(chan bool, 1)
-	go vm.printWorker(output, errCh, done, parseDone)
+	go vm.printWorker(len(sourceCodes), output, errCh, done)
 	<-done
 }
 
 /* print output and/or error to screen */
-func (vm *VM) printWorker(output <-chan string, errCh <-chan string, done chan<- bool, parseDone <-chan bool) {
-	for {
+func (vm *VM) printWorker(count int, output <-chan string, errCh <-chan string, done chan<- bool) {
+	for i := 0; i < count; i++ {
 		select {
 		case <-output:
 			fmt.Println(<-output)
 		case <-errCh:
 			fmt.Println("Fatal error: " + <-errCh)
-		case <-parseDone:
-			done <- <-parseDone
 		}
 	}
+	done <- true
 }
 
 /* wait until all workers finish and close channels */
-func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string, errCh chan<- string, done chan<- bool) {
+func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string, errCh chan<- string) {
 	wg.Wait()
 	close(errCh)
 	close(output)
-	done <- true
 }
 
 /* load source file from disk. Still not yet fully implemented */
