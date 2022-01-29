@@ -49,7 +49,11 @@ func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string, errCh chan
 /* load source file from disk. Still not yet fully implemented */
 func (vm *VM) loadFileWorker(wg *sync.WaitGroup, fileName string, ctx context.Context, output chan<- string, errCh chan<- string) {
 	defer wg.Done()
+	data, err := ioutil.ReadFile(fileName)
+	if err != nil {
+		errCh <- err.Error()
+	}
 	vm.classes = make(map[string]Class)
-	output <- fileName
+	output <- fmt.Sprintf("DEBUG: Source file '%v' content:%v", fileName, string(data)) // Debug info for testing
 	// TODO: parse source and create Class struct array
 }
