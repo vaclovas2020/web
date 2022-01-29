@@ -54,6 +54,6 @@ func (vm *VM) loadFileWorker(wg *sync.WaitGroup, fileName string, ctx context.Co
 		errCh <- err.Error()
 	}
 	vm.classes = make(map[string]Class)
-	output <- fmt.Sprintf("DEBUG: Source file '%v' content:%v", fileName, string(data)) // Debug info for testing
+	output <- string(data) // Debug info for testing
 	// TODO: parse source and create Class struct array
 }
