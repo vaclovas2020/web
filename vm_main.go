@@ -9,6 +9,7 @@ import (
 
 /* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
 func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
+	vm.classes = make(map[string]Class)
 	wg := &sync.WaitGroup{}
 	var sourceCodes []string
 	output := make(chan string)
@@ -59,7 +60,6 @@ func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string, errCh chan
 /* load source file from disk. Still not yet fully implemented */
 func (vm *VM) parseFileWorker(wg *sync.WaitGroup, sourceCode string, ctx context.Context, output chan<- string, errCh chan<- string) {
 	defer wg.Done()
-	vm.classes = make(map[string]Class)
 	output <- sourceCode // Debug info for testing
 	// TODO: parse source and create Class struct array
 }
