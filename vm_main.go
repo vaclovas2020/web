@@ -12,11 +12,9 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 	wg := &sync.WaitGroup{}
 	output := make(chan string)
 	errCh := make(chan string)
-	done := make(chan bool, 1)
-	go vm.printWorker(output, errCh, done)
 	files, err := ioutil.ReadDir(sourceDir)
 	if err != nil {
-		errCh <- err.Error()
+		panic(err.Error())
 	}
 	for _, file := range files {
 		if !file.IsDir() {
@@ -25,6 +23,8 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 		}
 	}
 	go vm.monitorWorker(wg, output, errCh)
+	done := make(chan bool, 1)
+	go vm.printWorker(output, errCh, done)
 	<-done
 }
 
