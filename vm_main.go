@@ -29,17 +29,14 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 }
 
 /* print output and/or error to screen */
-func (vm *VM) printWorker(output <-chan string, err <-chan string, done chan<- bool) {
-	for {
-		select {
-		case <-output:
-			fmt.Println(<-output)
-		case <-err:
-			fmt.Println("Fatal error:" + <-err)
-		default:
-			done <- true
-		}
+func (vm *VM) printWorker(output <-chan string, errCh <-chan string, done chan<- bool) {
+	for line := range output {
+		fmt.Println(line)
 	}
+	for errLine := range errCh {
+		fmt.Println("Fatal error: " + errLine)
+	}
+	done <- true
 }
 
 /* wait until all workers finish and close channels */
