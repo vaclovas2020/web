@@ -30,13 +30,16 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 
 /* print output and/or error to screen */
 func (vm *VM) printWorker(output <-chan string, errCh <-chan string, done chan<- bool) {
-	for line := range output {
-		fmt.Println(line)
+	for {
+		select {
+		case <-output:
+			fmt.Println(<-output)
+		case <-errCh:
+			fmt.Println("Fatal error: " + <-errCh)
+		default:
+			done <- true
+		}
 	}
-	for errLine := range errCh {
-		fmt.Println("Fatal error: " + errLine)
-	}
-	done <- true
 }
 
 /* wait until all workers finish and close channels */
