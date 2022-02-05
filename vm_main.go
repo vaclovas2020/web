@@ -32,7 +32,7 @@ func (vm *VM) InitVM(sourceDir string) {
 }
 
 /* Set handler to specific class method */
-func (vm *VM) DefineFunc(className string, methodName string, handler *base.FunctionHandler) {
+func (vm *VM) DefineFunc(className string, methodName string, handler base.FunctionHandler) {
 	if v, found := vm.classes[className].Methods[methodName]; found {
 		v.Handler = handler
 	}

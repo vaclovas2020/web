@@ -3,7 +3,7 @@ package base
 /* Web function representation in VM */
 type Function struct {
 	Args    map[string]*interface{}
-	Handler *FunctionHandler
+	Handler FunctionHandler
 }
 
 /* Web class represantation in VM */
