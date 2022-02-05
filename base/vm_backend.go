@@ -13,4 +13,6 @@ type Class struct {
 }
 
 /* User defined function handler */
-type FunctionHandler func(args map[string]*interface{}) (*interface{}, error)
+type FunctionHandler interface {
+	Invoke(args map[string]interface{}) error
+}

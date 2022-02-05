@@ -10,16 +10,15 @@ package main
 import (
 	"context"
 
-	"webimizer.dev/web/base"
+	"webimizer.dev/web/controller"
 	"webimizer.dev/web"
 )
 
 func main() {
 	vm := web.VM{}
 	vm.InitVM("web/src")
-	vm.DefineFunc("MainController", "index", base.FunctionHandler(func(args map[string]*interface{}) (*interface{}, error){
-		// TODO: implement controller method index 
-		return nil, nil
+	vm.DefineFunc("MainController", "index", controller.Handler(func(rw http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(rw, "Welcome from weblang!")
 	}))
 }
 ```

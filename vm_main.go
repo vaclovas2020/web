@@ -19,6 +19,8 @@ type VM struct {
 
 /* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
 func (vm *VM) InitVM(sourceDir string) {
+	fmt.Println("Welcome to Weblang----------------------\n\nCopyright (c) 2022, Vaclovas Lapinskis\nAll rights reserved.\n\nLicense: BSD-3-Clause License\n\n----------------------")
+	log.Println("\033[32m[weblang]\033[0m Preparing VM environment...")
 	vm.classes = make(map[string]base.Class)
 	vm.parser = &parser.Parser{Classes: &vm.classes}
 	vm.wg = &sync.WaitGroup{}
@@ -47,8 +49,9 @@ func (vm *VM) loadSourceDir(count *int, sourceDir string, output chan<- string) 
 	for _, file := range files {
 		if !file.IsDir() {
 			vm.wg.Add(1)
-			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), output)
 			*count++
+			log.Printf("\033[32m[weblang]\033[0m Loading %v worker(goroutine) for file '%v/%v' parsing purpose... ", *count, sourceDir, file.Name())
+			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), output)
 		} else {
 			vm.loadSourceDir(count, fmt.Sprintf("%v/%v", sourceDir, file.Name()), output)
 		}
