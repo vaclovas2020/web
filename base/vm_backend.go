@@ -1,4 +1,4 @@
-package web
+package base
 
 /* Web function representation in VM */
 type Function struct {
@@ -9,9 +9,4 @@ type Function struct {
 type Class struct {
 	Attributes map[string]interface{}
 	Methods    map[string]Function
-}
-
-/* Main VM struct */
-type VM struct {
-	classes map[string]Class
 }

@@ -4,12 +4,22 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"sync"
+
+	"webimizer.dev/web/base"
+	"webimizer.dev/web/parser"
 )
+
+/* Main VM struct */
+type VM struct {
+	classes map[string]base.Class
+	parser  *parser.Parser
+}
 
 /* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
 func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
-	vm.classes = make(map[string]Class)
+	vm.classes = make(map[string]base.Class)
 	wg := &sync.WaitGroup{}
 	count := 0
 	files, err := ioutil.ReadDir(sourceDir)
@@ -33,7 +43,7 @@ func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 /* print output and/or error to screen */
 func (vm *VM) printWorker(count int, output <-chan string, done chan<- bool) {
 	for i := 0; i < count; i++ {
-		fmt.Println(<-output)
+		log.Println(<-output)
 	}
 	done <- true
 }
@@ -52,6 +62,9 @@ func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, ctx context.C
 		panic(err.Error())
 	}
 	sourceCode := string(data)
-	output <- sourceCode // Debug info for testing
-	// TODO: parse source and create Class struct array
+	vm.parser = &parser.Parser{Classes: &vm.classes}
+	err = vm.parser.Parse(sourceCode)
+	if err != nil {
+		panic(err.Error())
+	}
 }
