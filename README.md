@@ -17,7 +17,7 @@ import (
 func main() {
 	vm := web.VM{}
 	vm.InitVM("web/src")
-	vm.DefineFunc("MainController", "index", &base.FunctionHandler(func(args map[string]*interface{}) (*interface{}, error){
+	vm.DefineFunc("MainController", "index", base.FunctionHandler(func(args map[string]*interface{}) (*interface{}, error){
 		// TODO: implement controller method index 
 	}))
 }
