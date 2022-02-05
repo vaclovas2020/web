@@ -19,6 +19,7 @@ func main() {
 	vm.InitVM("web/src")
 	vm.DefineFunc("MainController", "index", base.FunctionHandler(func(args map[string]*interface{}) (*interface{}, error){
 		// TODO: implement controller method index 
+		return nil, nil
 	}))
 }
 ```
