@@ -20,6 +20,7 @@ type VM struct {
 /* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
 func (vm *VM) InitVM(ctx context.Context, args []string, sourceDir string) {
 	vm.classes = make(map[string]base.Class)
+	vm.parser = &parser.Parser{Classes: &vm.classes}
 	wg := &sync.WaitGroup{}
 	count := 0
 	files, err := ioutil.ReadDir(sourceDir)
@@ -62,7 +63,7 @@ func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, ctx context.C
 		panic(err.Error())
 	}
 	sourceCode := string(data)
-	vm.parser = &parser.Parser{Classes: &vm.classes}
+	output <- "Parsing file '" + fileName + "'..."
 	err = vm.parser.Parse(sourceCode)
 	if err != nil {
 		panic(err.Error())
