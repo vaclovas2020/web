@@ -1,11 +1,9 @@
 package parser
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"regexp"
-	"strings"
 
 	"webimizer.dev/web/base"
 )
@@ -18,7 +16,10 @@ type Parser struct {
 const regExpClassName string = "[[:alpha:]]\\w*"
 const serverRegExpStart string = "^(server)\\s+" + regExpClassName + "\\s*[{]\\s*"
 const serverRegExpParamName string = "(router|port|host)"
-const serverRegExpOneParam string = "([@]" + serverRegExpParamName + "[(]\\s*[\"]*(\\w|[.])+[\"]*\\s*[)]\\s+)"
+const serverRegExpParamValueStart string = "[(]\\s*[\"]*"
+const serverRegExpParamValue string = "(\\w|[.])+"
+const serverRegExpParamValueEnd string = "[\"]*\\s*[)]\\s+"
+const serverRegExpOneParam string = "([@]" + serverRegExpParamName + serverRegExpParamValueStart + serverRegExpParamValue + serverRegExpParamValueEnd + ")"
 const serverRegExpParams string = serverRegExpOneParam + "{3}"
 const serverRegExpEnd string = "[}]\\s*$"
 const serverRegExpFull string = serverRegExpStart + serverRegExpParams + serverRegExpEnd
@@ -37,37 +38,10 @@ func (parser *Parser) Parse(sourceCode string) error {
 func (parser *Parser) pushToMap(className string, class *base.Class) error {
 	if _, found := (*parser.Classes)[className]; !found {
 		(*parser.Classes)[className] = *class
-		log.Printf("\033[32m[weblang]\033[0m Loaded class '%v' successfully", className)
+		log.Printf("\033[32m[weblang]\033[0m Loaded %v class '%v' successfully: %v", (*class).Type, className, *class)
 		return nil
 	}
-	return fmt.Errorf("class with name '%v' already exists", className)
-}
-
-func (parser *Parser) parseServerParams(class *base.Class, sourceCode string) {
-	serverExpOneParam := parser.compileRegExp(serverRegExpOneParam)
-	if serverExpOneParam.MatchString(sourceCode) {
-		oneParam := serverExpOneParam.FindString(sourceCode)
-		newSourceCode := strings.Replace(sourceCode, oneParam, "", 1)
-		// TODO: parse param name and value
-		if newSourceCode != "" {
-			parser.parseServerParams(class, newSourceCode)
-		}
-	}
-}
-
-func (parser *Parser) parseServer(sourceCode string) error {
-	var className string
-	var class base.Class
-	serverExpFull := parser.compileRegExp(serverRegExpFull)
-	if serverExpFull.MatchString(sourceCode) {
-		serverExpStart := parser.compileRegExp(serverRegExpStart)
-		classNameExp := parser.compileRegExp(regExpClassName)
-		className = classNameExp.FindString(strings.Replace(serverExpStart.FindString(sourceCode), "server", "", 1))
-		parser.parseServerParams(&class, sourceCode)
-	} else {
-		return errors.New("incorrect class definition syntax")
-	}
-	return parser.pushToMap(className, &class)
+	return fmt.Errorf("%v class with name '%v' already exists", (*class).Type, className)
 }
 
 func (parser *Parser) compileRegExp(regExp string) *regexp.Regexp {
@@ -76,9 +50,4 @@ func (parser *Parser) compileRegExp(regExp string) *regexp.Regexp {
 		panic(err)
 	}
 	return serverExpStart
-}
-
-func (parser *Parser) isServerClass(sourceCode string) bool {
-	serverExpStart := parser.compileRegExp(serverRegExpStart)
-	return serverExpStart.MatchString(sourceCode)
 }
