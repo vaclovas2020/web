@@ -89,5 +89,5 @@ func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, output chan<-
 	if err != nil {
 		panic(err.Error())
 	}
-	output <- "\033[32m[weblang]\033[0m Parsed file '" + fileName + "' successfully"
+	output <- fmt.Sprintf("\033[32m[weblang]\033[0m Parsed file '%v' successfully", fileName)
 }

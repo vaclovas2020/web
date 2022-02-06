@@ -3,6 +3,7 @@ package parser
 import (
 	"errors"
 	"fmt"
+	"log"
 	"regexp"
 	"strings"
 
@@ -36,6 +37,7 @@ func (parser *Parser) Parse(sourceCode string) error {
 func (parser *Parser) pushToMap(className string, class *base.Class) error {
 	if _, found := (*parser.Classes)[className]; !found {
 		(*parser.Classes)[className] = *class
+		log.Printf("\033[32m[weblang]\033[0m Loaded class '%v' successfully", className)
 		return nil
 	}
 	return fmt.Errorf("class with name '%v' already exists", className)
