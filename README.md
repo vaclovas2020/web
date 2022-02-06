@@ -22,3 +22,5 @@ func main() {
 	}))
 }
 ```
+
+Full example: https://github.com/vaclovas2020/webtest
