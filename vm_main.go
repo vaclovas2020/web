@@ -19,7 +19,12 @@ type VM struct {
 
 /* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
 func (vm *VM) InitVM(sourceDir string) {
-	fmt.Println("Welcome to Weblang----------------------\n\nCopyright (c) 2022, Vaclovas Lapinskis\nAll rights reserved.\n\nLicense: BSD-3-Clause License\n\n----------------------")
+	fmt.Println("Welcome to Weblang")
+	fmt.Println("----------------------")
+	fmt.Println("Copyright (c) 2022, Vaclovas Lapinskis")
+	fmt.Println("All rights reserved.")
+	fmt.Println("License: BSD-3-Clause License")
+	fmt.Println("----------------------")
 	log.Println("\033[32m[weblang]\033[0m Preparing VM environment...")
 	vm.classes = make(map[string]base.Class)
 	vm.parser = &parser.Parser{Classes: &vm.classes}
