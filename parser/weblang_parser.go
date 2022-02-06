@@ -17,7 +17,7 @@ type Parser struct {
 
 const regExpClassName string = "[[:alpha:]]\\w*"
 const serverRegExpStart string = "^(server)\\s+" + regExpClassName + "\\s*[{]\\s*"
-const serverRegExpParamName = "(router|port|host)"
+const serverRegExpParamName string = "(router|port|host)"
 const serverRegExpOneParam string = "([@]" + serverRegExpParamName + "[(]\\s*[\"]*(\\w|[.])+[\"]*\\s*[)]\\s+)"
 const serverRegExpParams string = serverRegExpOneParam + "{3}"
 const serverRegExpEnd string = "[}]\\s*$"
