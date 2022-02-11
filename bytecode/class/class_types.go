@@ -1,4 +1,4 @@
-package bytecode
+package class
 
 /* Weblang buil-in class type class */
 const ClassType_Class uint8 = 0x00
