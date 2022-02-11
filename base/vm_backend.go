@@ -2,12 +2,14 @@ package base
 
 import (
 	"webimizer.dev/web/bytecode"
+	"webimizer.dev/web/bytecode/class/method"
 )
 
 /* Web function representation in VM */
 type Function struct {
-	Args    map[string]interface{} // arguments list
-	Handler FunctionHandler        // FunctionHandler interface for function invoke
+	Args        map[string]interface{} // arguments list
+	Handler     FunctionHandler        // FunctionHandler interface for function invoke
+	ClassMethod *method.ClassMethod    // ClassMethod struct from bytecode file
 }
 
 /* Stack of all declared classes in VM */
