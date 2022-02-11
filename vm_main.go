@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strings"
 	"sync"
 
 	"webimizer.dev/web/base"
@@ -52,7 +53,7 @@ func (vm *VM) loadSourceDir(count *int, sourceDir string, output chan<- string) 
 		panic(err.Error())
 	}
 	for _, file := range files {
-		if !file.IsDir() {
+		if !file.IsDir() && strings.Contains(file.Name(), ".web") {
 			vm.wg.Add(1)
 			*count++
 			log.Printf("\033[32m[weblang]\033[0m Loading %v worker(goroutine) for file '%v/%v' parsing purpose... ", *count, sourceDir, file.Name())
@@ -80,6 +81,7 @@ func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string) {
 /* load source file from disk. Still not yet fully implemented */
 func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, output chan<- string) {
 	defer wg.Done()
+	output <- fmt.Sprintf("\033[32m[weblang]\033[0m Parsing file '%v'...", fileName)
 	data, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		panic(err.Error())
@@ -89,5 +91,4 @@ func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, output chan<-
 	if err != nil {
 		panic(err.Error())
 	}
-	output <- fmt.Sprintf("\033[32m[weblang]\033[0m Parsed file '%v' successfully", fileName)
 }
