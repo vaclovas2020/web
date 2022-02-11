@@ -82,7 +82,6 @@ func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string) {
 /* load source file from disk. Still not yet fully implemented */
 func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, output chan<- string) {
 	defer wg.Done()
-	output <- fmt.Sprintf("\033[32m[weblang]\033[0m Parsing file '%v'...", fileName)
 	data, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		panic(err.Error())
@@ -92,4 +91,5 @@ func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, output chan<-
 	if err != nil {
 		panic(err.Error())
 	}
+	output <- fmt.Sprintf("\033[32m[weblang]\033[0m Parsing file '%v'...", fileName)
 }
