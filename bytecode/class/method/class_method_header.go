@@ -1,7 +1,7 @@
 package method
 
 /* Header struct for classMethod declaration in Weblang bytecode file */
-type ClassMethodHeader struct {
+type ClassMethod struct {
 	MethodName               [80]byte // Class method name (max 80 symbols)
 	MethodType               uint8    // Method type public, private, protected, external
 	InstructionSetStartIndex uint64   // Index of first InstructionSet block

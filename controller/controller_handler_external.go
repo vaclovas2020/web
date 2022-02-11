@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"net/http"
 
+	"webimizer.dev/web/base"
 	app "webimizer.dev/webimizer"
 )
 
 type Handler func(rw http.ResponseWriter, r *http.Request)
 
-func (handler Handler) Invoke(args map[string]interface{}) error {
+func (handler Handler) Invoke(args map[string]interface{}, funcPtr *base.Function) error {
 	if v, found := args["route"]; found {
 		if method, found := args["method"]; found {
 			methodStr := fmt.Sprintf("%v", method)

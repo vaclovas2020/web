@@ -1,7 +1,7 @@
 package class
 
-/* Weblang buil-in class type class */
-const ClassType_Class uint8 = 0x00
+/* Weblang build-in class type object */
+const ClassType_Object uint8 = 0x00
 
 /* Weblang buil-in class type server */
 const ClassType_Server uint8 = 0x01

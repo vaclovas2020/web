@@ -8,14 +8,15 @@ import (
 	"sync"
 
 	"webimizer.dev/web/base"
+	"webimizer.dev/web/bytecode/class/method"
 	"webimizer.dev/web/parser"
 )
 
 /* Main VM struct */
 type VM struct {
-	classes map[string]base.Class
-	parser  *parser.Parser
-	wg      *sync.WaitGroup
+	stack  base.MemoryStack
+	parser *parser.Parser
+	wg     *sync.WaitGroup
 }
 
 /* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
@@ -27,8 +28,10 @@ func (vm *VM) InitVM(sourceDir string) {
 	fmt.Println("License: BSD-3-Clause License")
 	fmt.Println("----------------------")
 	log.Println("\033[32m[weblang]\033[0m Preparing VM environment...")
-	vm.classes = make(map[string]base.Class)
-	vm.parser = &parser.Parser{Classes: &vm.classes}
+	vm.stack = base.MemoryStack{}
+	vm.stack.Classes = make(map[string]base.Class)
+	vm.stack.Objects = make(map[string]base.Object)
+	vm.parser = &parser.Parser{Stack: &vm.stack}
 	vm.wg = &sync.WaitGroup{}
 	count := 0
 	output := make(chan string)
@@ -39,10 +42,12 @@ func (vm *VM) InitVM(sourceDir string) {
 	<-done
 }
 
-/* Set handler to specific class method */
+/* Set handler to specific class method (works with external methods only) */
 func (vm *VM) DefineFunc(className string, methodName string, handler base.FunctionHandler) {
-	if v, found := vm.classes[className].Methods[methodName]; found {
-		v.Handler = handler
+	if v, found := vm.stack.Classes[className].Methods[methodName]; found {
+		if v.ClassMethod != nil && v.ClassMethod.MethodType == method.MethodType_External {
+			v.Handler = handler
+		}
 	}
 }
 

@@ -16,7 +16,7 @@ func (parser *Parser) parseServerParams(class *base.Class, sourceCode string, cl
 		newSourceCode := strings.Replace(sourceCode, oneParam, "", 1)
 		paramNameExp := parser.compileRegExp(serverRegExpParamName)
 		paramName := paramNameExp.FindString(oneParam)
-		if _, found := (*class).Attributes[paramName]; found {
+		if _, found := (*class).Object.Attributes[paramName]; found {
 			return fmt.Errorf("class %v already has attribute %v defined", className, paramName)
 		}
 		paramValueFull := strings.Replace(oneParam, "@"+paramName, "", 1)
@@ -29,9 +29,9 @@ func (parser *Parser) parseServerParams(class *base.Class, sourceCode string, cl
 			if err != nil {
 				return err
 			}
-			(*class).Attributes[paramName] = intVar
+			(*class).Object.Attributes[paramName] = intVar
 		} else {
-			(*class).Attributes[paramName] = paramValue
+			(*class).Object.Attributes[paramName] = paramValue
 		}
 		if newSourceCode != "" {
 			return parser.parseServerParams(class, newSourceCode, className)
@@ -43,13 +43,14 @@ func (parser *Parser) parseServerParams(class *base.Class, sourceCode string, cl
 func (parser *Parser) parseServer(sourceCode string) error {
 	var className string
 	var class base.Class
-	class.Type = "server"
 	serverExpFull := parser.compileRegExp(serverRegExpFull)
 	if serverExpFull.MatchString(sourceCode) {
 		serverExpStart := parser.compileRegExp(serverRegExpStart)
 		classNameExp := parser.compileRegExp(regExpClassName)
 		className = classNameExp.FindString(strings.Replace(serverExpStart.FindString(sourceCode), "server", "", 1))
-		class.Attributes = make(map[string]interface{})
+		obj := &base.Object{Class: &class, Scope: 0}
+		class.Object = obj
+		class.Object.Attributes = make(map[string]interface{})
 		err := parser.parseServerParams(&class, sourceCode, className)
 		if err != nil {
 			return err
