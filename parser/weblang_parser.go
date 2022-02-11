@@ -36,13 +36,18 @@ func (parser *Parser) Parse(sourceCode string) error {
 }
 
 /* Push class to MemoryStack */
-func (parser *Parser) pushToMap(className string, class *base.Class) error {
+func (parser *Parser) pushToMap(objName string, className string, class *base.Class, obj *base.Object) error {
 	if _, found := (*parser.Stack).Classes[className]; !found {
 		(*parser.Stack).Classes[className] = *class
 		log.Printf("\033[32m[weblang]\033[0m Loaded class '%v' to VM environement successfully", className)
-		return nil
+	} else {
+		return fmt.Errorf("class with name '%v' already exists", className)
 	}
-	return fmt.Errorf("class with name '%v' already exists", className)
+	if o, found := (*parser.Stack).Objects[objName]; !found || o.Scope > 0 {
+		(*parser.Stack).Objects[objName] = *obj
+		log.Printf("\033[32m[weblang]\033[0m Loaded object '%v' to VM environement successfully: %v", objName, (*obj).Attributes)
+	}
+	return fmt.Errorf("object with name '%v' already exists", objName)
 }
 
 /* Compile regexp */
