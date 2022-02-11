@@ -58,7 +58,7 @@ func (vm *VM) loadSourceDir(count *int, sourceDir string, output chan<- string) 
 			*count++
 			log.Printf("\033[32m[weblang]\033[0m Loading %v worker(goroutine) for file '%v/%v' parsing purpose... ", *count, sourceDir, file.Name())
 			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), output)
-		} else {
+		} else if file.IsDir() {
 			vm.loadSourceDir(count, fmt.Sprintf("%v/%v", sourceDir, file.Name()), output)
 		}
 	}
