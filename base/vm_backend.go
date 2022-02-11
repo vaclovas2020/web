@@ -2,15 +2,12 @@ package base
 
 import (
 	"webimizer.dev/web/bytecode"
-	"webimizer.dev/web/bytecode/class/method"
 )
 
 /* Web function representation in VM */
 type Function struct {
-	Args        map[string]interface{} // arguments list
-	Handler     FunctionHandler
-	ClassMethod *method.ClassMethod // bytecode ClassMethod pointer
-	Object      *Object             // pointer to object struct
+	Args    map[string]interface{} // arguments list
+	Handler FunctionHandler        // FunctionHandler interface for function invoke
 }
 
 /* Stack of all declared classes in VM */
@@ -23,7 +20,6 @@ type MemoryStack struct {
 type Class struct {
 	Methods  map[string]Function // Function list
 	ByteCode *bytecode.ByteCode  // Bytecode pointer
-	Stack    *MemoryStack        // list of all declared global classes & objects in VM environment
 }
 
 /* Object struct in VM environment */
@@ -36,5 +32,5 @@ type Object struct {
 
 /* User defined function handler */
 type FunctionHandler interface {
-	Invoke(args map[string]interface{}, funcPtr *Function) error // Invoke function execution
+	Invoke(args map[string]interface{}, funcPtr *Function, obj *Object) error // Invoke function execution
 }
