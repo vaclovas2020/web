@@ -44,14 +44,12 @@ func (parser *Parser) parseServer(sourceCode string) error {
 	var className string
 	var objName string
 	var class base.Class
-	obj := &base.Object{Class: &class, Scope: 0}
+	obj := &base.Object{Class: &class, Scope: 0, Stack: parser.Stack}
 	serverExpFull := parser.compileRegExp(serverRegExpFull)
 	if serverExpFull.MatchString(sourceCode) {
 		serverExpStart := parser.compileRegExp(serverRegExpStart)
 		classNameExp := parser.compileRegExp(regExpClassName)
 		className = classNameExp.FindString(strings.Replace(serverExpStart.FindString(sourceCode), "server", "", 1))
-		class.Stack = parser.Stack
-		obj.Stack = parser.Stack
 		obj.Attributes = make(map[string]interface{})
 		objName = strings.ToLower(className)
 		err := parser.parseServerParams(obj, sourceCode, className)
