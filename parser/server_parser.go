@@ -51,7 +51,7 @@ func (parser *Parser) parseServer(sourceCode string) error {
 		classNameExp := parser.compileRegExp(regExpClassName)
 		className = classNameExp.FindString(strings.Replace(serverExpStart.FindString(sourceCode), "server", "", 1))
 		obj.Attributes = make(map[string]interface{})
-		objName = strings.ToLower(className)
+		objName = className
 		err := parser.parseServerParams(obj, sourceCode, className)
 		if err != nil {
 			return err
