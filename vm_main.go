@@ -75,7 +75,6 @@ func (vm *VM) printWorker(count int, output <-chan string, done chan<- bool) {
 /* wait until all workers finish and close channels */
 func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string) {
 	wg.Wait()
-	log.Printf("Classes: %v", vm.classes)
 	close(output)
 }
 
@@ -91,5 +90,5 @@ func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, output chan<-
 	if err != nil {
 		panic(err.Error())
 	}
-	output <- fmt.Sprintf("\033[32m[weblang]\033[0m Parsing file '%v'...", fileName)
+	output <- fmt.Sprintf("\033[32m[weblang]\033[0m Parsed file '%v'...", fileName)
 }
