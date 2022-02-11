@@ -46,6 +46,7 @@ func (parser *Parser) pushToMap(objName string, className string, class *base.Cl
 	if o, found := (*parser.Stack).Objects[objName]; !found || o.Scope > 0 {
 		(*parser.Stack).Objects[objName] = *obj
 		log.Printf("\033[32m[weblang]\033[0m Loaded %v object '%v' to VM environement successfully: %v", className, objName, (*obj).Attributes)
+		return nil
 	}
 	return fmt.Errorf("object with name '%v' already exists", objName)
 }
