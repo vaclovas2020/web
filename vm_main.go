@@ -75,6 +75,7 @@ func (vm *VM) printWorker(count int, output <-chan string, done chan<- bool) {
 /* wait until all workers finish and close channels */
 func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string) {
 	wg.Wait()
+	log.Printf("Classes: %v", vm.classes)
 	close(output)
 }
 
