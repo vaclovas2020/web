@@ -17,7 +17,7 @@ type Server struct {
 	RouterObject *base.Object
 }
 
-func (sr Server) Start() {
+func (sr Server) Start() error {
 	log.Printf("\033[32m[weblang]\033[0m Server starting listen on %v:%v...", sr.Host, sr.Port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf("%v:%v", sr.Host, sr.Port), nil))
+	return http.ListenAndServe(fmt.Sprintf("%v:%v", sr.Host, sr.Port), nil)
 }
