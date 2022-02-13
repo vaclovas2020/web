@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"runtime/debug"
 	"strings"
 	"sync"
 
@@ -14,6 +13,9 @@ import (
 	"webimizer.dev/web/bytecode/class/method"
 	"webimizer.dev/web/parser"
 )
+
+/* Weblang version string */
+const Version string = "v0.3.9"
 
 /* Main VM struct */
 type VM struct {
@@ -25,7 +27,7 @@ type VM struct {
 /* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
 func (vm *VM) InitVM(sourceDir string) {
 	fmt.Println("----------------------")
-	fmt.Printf("Welcome to Weblang %v\n\n", getVersion())
+	fmt.Printf("Welcome to Weblang %v\n\n", Version)
 	fmt.Println("Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved.")
 	fmt.Println("License: BSD-3-Clause License")
 	fmt.Println("----------------------")
@@ -54,19 +56,6 @@ func (vm *VM) DefineFunc(className string, methodName string, handler base.Funct
 			v.Handler = handler
 		}
 	}
-}
-
-func getVersion() string {
-	bi, ok := debug.ReadBuildInfo()
-	if !ok {
-		return ""
-	}
-	for _, dep := range bi.Deps {
-		if dep.Path == "webimizer.dev/web/base" {
-			return dep.Version
-		}
-	}
-	return ""
 }
 
 /* parse source file */
