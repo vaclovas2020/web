@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved */
+
 package web
 
 import (
@@ -14,17 +16,16 @@ import (
 
 /* Main VM struct */
 type VM struct {
-	stack  base.MemoryStack
-	parser *parser.Parser
-	wg     *sync.WaitGroup
+	stack  base.MemoryStack // Global MemoryStack
+	parser *parser.Parser   // Global Parser
+	wg     *sync.WaitGroup  // WaitGroup for goroutines control
 }
 
 /* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
 func (vm *VM) InitVM(sourceDir string) {
 	fmt.Println("----------------------")
 	fmt.Println("Welcome to Weblang\n\n ")
-	fmt.Println("Copyright (c) 2022, Vaclovas Lapinskis")
-	fmt.Println("All rights reserved.")
+	fmt.Println("Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved.")
 	fmt.Println("License: BSD-3-Clause License")
 	fmt.Println("----------------------")
 	log.Println("\033[32m[weblang]\033[0m Preparing VM environment...")
@@ -64,7 +65,7 @@ func (vm *VM) loadSourceDir(count *int, sourceDir string, output chan<- string) 
 		if !file.IsDir() && strings.Contains(file.Name(), ".web") {
 			vm.wg.Add(1)
 			*count++
-			log.Printf("\033[32m[weblang]\033[0m Loading %v worker(goroutine) for file '%v/%v' parsing purpose... ", *count, sourceDir, file.Name())
+			log.Printf("\033[32m[weblang]\033[0m Loading %v worker(goroutine) for file '%v/%v' parsing...", *count, sourceDir, file.Name())
 			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), output)
 		} else if file.IsDir() {
 			vm.loadSourceDir(count, fmt.Sprintf("%v/%v", sourceDir, file.Name()), output)

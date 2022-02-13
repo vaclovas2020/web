@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved */
+
 package method
 
 /* Header struct for classMethod declaration in Weblang bytecode file */

@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved */
+
 package instructionset
 
 /* Header struct for dynamic length instruction block for Weblang VM */

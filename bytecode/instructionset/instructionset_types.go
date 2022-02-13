@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved */
+
 package instructionset
 
 /* Weblang Instruction type: printLog(format, args) built-in function to print log message. Works with all class types */

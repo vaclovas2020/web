@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved */
+
 package method
 
 /* Method type public: publically accessible class method */
