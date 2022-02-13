@@ -9,6 +9,17 @@ import (
 	"webimizer.dev/web/base"
 )
 
+const serverRegExpStart string = "^(server)\\s+" + regExpClassName + "\\s*[{]\\s*"
+const serverRegExpParamName string = "(router|port|host)"
+const serverRegExpParamValueStart string = "[(]\\s*[\"]*"
+const serverRegExpParamValue string = "(\\w|[.])+"
+const serverRegExpParamValueEnd string = "[\"]*\\s*[)]\\s+"
+const serverRegExpOneParam string = "([@]" + serverRegExpParamName + serverRegExpParamValueStart + serverRegExpParamValue + serverRegExpParamValueEnd + ")"
+const serverRegExpParams string = serverRegExpOneParam + "{3}"
+const serverRegExpEnd string = "[}]\\s*$"
+const serverRegExpFull string = serverRegExpStart + serverRegExpParams + serverRegExpEnd
+
+/* Parse server class parameters */
 func (parser *Parser) parseServerParams(obj *base.Object, sourceCode string, className string) error {
 	serverExpOneParam := parser.compileRegExp(serverRegExpOneParam)
 	if serverExpOneParam.MatchString(sourceCode) {
@@ -40,6 +51,7 @@ func (parser *Parser) parseServerParams(obj *base.Object, sourceCode string, cla
 	return nil
 }
 
+/* parse server class */
 func (parser *Parser) parseServer(sourceCode string) error {
 	var className string
 	var objName string
@@ -62,6 +74,7 @@ func (parser *Parser) parseServer(sourceCode string) error {
 	return parser.pushToMap(objName, className, &class, obj)
 }
 
+/* check if it is server class type */
 func (parser *Parser) isServerClass(sourceCode string) bool {
 	serverExpStart := parser.compileRegExp(serverRegExpStart)
 	return serverExpStart.MatchString(sourceCode)
