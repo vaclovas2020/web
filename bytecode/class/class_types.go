@@ -23,3 +23,6 @@ const ClassType_Service uint8 = 0x06
 
 /* Weblang buil-in class type view */
 const ClassType_View uint8 = 0x07
+
+/* Weblang buil-in class type cms */
+const ClassType_Cms uint8 = 0x08
