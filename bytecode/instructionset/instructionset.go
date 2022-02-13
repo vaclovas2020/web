@@ -12,3 +12,5 @@ type InstructionSet struct {
 	Header   *InstructionSetHeader // Heaader info: index number, type and length
 	ByteCode []byte                // data array (bytes)
 }
+
+// Copyright(c) 2022 Vaclovas Lapinskis. All rights reserved. License: BSD 3-Clause License
