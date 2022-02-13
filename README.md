@@ -21,7 +21,7 @@ import (
 
 func main() {
 	vm := web.VM{}
-	vm.InitVM("web/src")
+	vm.InitVM("web/src", "web/generated")
 	vm.DefineFunc("MainController", "index", controller.Handler(func(rw http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(rw, "Welcome from weblang!")
 	}))
