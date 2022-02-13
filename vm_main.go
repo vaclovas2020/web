@@ -45,7 +45,10 @@ func (vm *VM) InitVM(sourceDir string) {
 /* Set handler to specific class method (works with external methods only) */
 func (vm *VM) DefineFunc(className string, methodName string, handler base.FunctionHandler) {
 	if v, found := vm.stack.Classes[className].Methods[methodName]; found {
-		if v.ClassMethod != nil && v.ClassMethod.MethodType == method.MethodType_External {
+		if v.ClassMethod != nil &&
+			(v.ClassMethod.MethodType == method.MethodType_ExternalPublic ||
+				v.ClassMethod.MethodType == method.MethodType_ExternalPrivate ||
+				v.ClassMethod.MethodType == method.MethodType_ExternalProtected) {
 			v.Handler = handler
 		}
 	}
