@@ -2,7 +2,7 @@
 
 ![Weblang](weblang.png "Weblang")
 
-[![pkg.go for webimizer.dev/web][godoc-badge]][godoc-url]
+[![Go Reference](https://pkg.go.dev/badge/webimizer.dev/web.svg)](https://pkg.go.dev/webimizer.dev/web)
 
 Go-powered new programming language for web development
 
