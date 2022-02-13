@@ -3,11 +3,15 @@
 package generator
 
 import (
-	"webimizer.dev/web/bytecode"
+	"webimizer.dev/web/base"
 )
 
 /* Weblang bytecode class file generator for use in Weblang VM */
 type ByteCodeGenerator struct {
-	Data     bytecode.ByteCode // data struct
-	FileName string            // Weblang bytecode full file name
+	Class *base.Class
+}
+
+func (generator *ByteCodeGenerator) Generate(byteCodeFileName string, sourceCodeFileName string) error {
+	// TODO: implement method
+	return nil
 }

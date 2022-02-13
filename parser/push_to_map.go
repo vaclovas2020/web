@@ -3,31 +3,13 @@
 package parser
 
 import (
+	"errors"
 	"fmt"
 	"log"
-	"regexp"
 
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class"
 )
-
-/* Weblang language syntax parser */
-type Parser struct {
-	Stack *base.MemoryStack // Global MemoryStack on WebLang VM
-}
-
-const regExpClassName string = "[[:alpha:]]\\w*"
-
-/* Parse source code and append result to class map */
-func (parser *Parser) Parse(sourceCode string) error {
-	if parser.isServerClass(sourceCode) {
-		err := parser.parseServer(sourceCode)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
 
 /* Push class to MemoryStack */
 func (parser *Parser) pushToMap(objName string, className string, classPtr *base.Class, obj *base.Object) error {
@@ -36,6 +18,13 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 		log.Printf("\033[32m[weblang]\033[0m Loaded class '%v' to VM environment successfully", className)
 	} else {
 		return fmt.Errorf("class with name '%v' already exists", className)
+	}
+	if (*parser.Server).ServerObject != nil && (*classPtr).ByteCode != nil && (*classPtr).ByteCode.Header.ClassType == class.ClassType_Server {
+		return errors.New("server type class already exists")
+	}
+	if (*classPtr).ByteCode != nil && (*classPtr).ByteCode.Header.ClassType == class.ClassType_Server {
+		(*parser.Server).ServerObject = obj
+		(*parser.Server).Host = fmt.Sprintf("%v", obj.Attributes["host"])
 	}
 	if (*classPtr).ByteCode != nil && ((*classPtr).ByteCode.Header.ClassType == class.ClassType_Object ||
 		(*classPtr).ByteCode.Header.ClassType == class.ClassType_Model) {
@@ -47,13 +36,4 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 		return nil
 	}
 	return fmt.Errorf("object with name '%v' already exists", objName)
-}
-
-/* Compile regexp */
-func (parser *Parser) compileRegExp(regExp string) *regexp.Regexp {
-	serverExpStart, err := regexp.Compile(regExp)
-	if err != nil {
-		panic(err)
-	}
-	return serverExpStart
 }

@@ -11,10 +11,10 @@ import (
 )
 
 type Server struct {
-	Host        string
-	Port        int
-	ServerClass *base.Class
-	RouterClass *base.Class
+	Host         string
+	Port         int
+	ServerObject *base.Object
+	RouterObject *base.Object
 }
 
 func (sr Server) Start() {
