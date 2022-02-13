@@ -39,7 +39,7 @@ func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
 	vm.stack.Classes = make(map[string]base.Class)
 	vm.stack.Objects = make(map[string]base.Object)
 	vm.server = &server.Server{}
-	vm.parser = &parser.Parser{Stack: &vm.stack}
+	vm.parser = &parser.Parser{Stack: &vm.stack, Server: vm.server}
 	vm.wg = &sync.WaitGroup{}
 	count := 0
 	output := make(chan string)
