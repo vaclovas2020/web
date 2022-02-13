@@ -33,7 +33,7 @@ func (parser *Parser) Parse(sourceCode string) error {
 func (parser *Parser) pushToMap(objName string, className string, classPtr *base.Class, obj *base.Object) error {
 	if _, found := (*parser.Stack).Classes[className]; !found {
 		(*parser.Stack).Classes[className] = *classPtr
-		log.Printf("\033[32m[weblang]\033[0m Loaded class '%v' to VM environement successfully", className)
+		log.Printf("\033[32m[weblang]\033[0m Loaded class '%v' to VM environment successfully", className)
 	} else {
 		return fmt.Errorf("class with name '%v' already exists", className)
 	}

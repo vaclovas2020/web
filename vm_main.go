@@ -10,12 +10,13 @@ import (
 	"sync"
 
 	"webimizer.dev/web/base"
+	"webimizer.dev/web/bytecode/class"
 	"webimizer.dev/web/bytecode/class/method"
 	"webimizer.dev/web/parser"
 )
 
 /* Weblang version string */
-const Version string = "v0.3.10"
+const Version string = "v0.3.11"
 
 /* Main VM struct */
 type VM struct {
@@ -27,7 +28,7 @@ type VM struct {
 /* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
 func (vm *VM) InitVM(sourceDir string) {
 	fmt.Println("----------------------")
-	fmt.Printf("Welcome to Weblang %v\n\n", Version)
+	fmt.Printf("Welcome to Weblang %v\n\n (bytecode version %v)", Version, class.ByteCodeVersion)
 	fmt.Println("Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved.")
 	fmt.Println("License: BSD-3-Clause License")
 	fmt.Println("----------------------")
