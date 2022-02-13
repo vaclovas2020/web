@@ -13,6 +13,7 @@ import (
 	"webimizer.dev/web/bytecode/class"
 	"webimizer.dev/web/bytecode/class/method"
 	"webimizer.dev/web/parser"
+	"webimizer.dev/web/server"
 )
 
 /* Weblang version string */
@@ -22,11 +23,12 @@ const Version string = "v0.3.12"
 type VM struct {
 	stack  base.MemoryStack // Global MemoryStack
 	parser *parser.Parser   // Global Parser
+	server *server.Server   // Global server
 	wg     *sync.WaitGroup  // WaitGroup for goroutines control
 }
 
-/* Initialize VM with given context and arguments. Please provide correct sourceDir - directory of Web language source files */
-func (vm *VM) InitVM(sourceDir string) {
+/* Initialize VM with given context and arguments. Please provide correct sourceDir (directory of Web language source files) and byteCodeDir (direcotry for bytecode files) */
+func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
 	fmt.Println("----------------------")
 	fmt.Printf("Welcome to Weblang %v (bytecode version %v)\n\n", Version, class.ByteCodeVersion)
 	fmt.Println("Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved.")
@@ -36,11 +38,12 @@ func (vm *VM) InitVM(sourceDir string) {
 	vm.stack = base.MemoryStack{}
 	vm.stack.Classes = make(map[string]base.Class)
 	vm.stack.Objects = make(map[string]base.Object)
+	vm.server = &server.Server{}
 	vm.parser = &parser.Parser{Stack: &vm.stack}
 	vm.wg = &sync.WaitGroup{}
 	count := 0
 	output := make(chan string)
-	vm.loadSourceDir(&count, sourceDir, output)
+	vm.loadSourceDir(&count, sourceDir, byteCodeDir, output)
 	go vm.monitorWorker(vm.wg, output)
 	done := make(chan bool, 1)
 	go vm.printWorker(count, output, done)
@@ -60,7 +63,7 @@ func (vm *VM) DefineFunc(className string, methodName string, handler base.Funct
 }
 
 /* parse source file */
-func (vm *VM) loadSourceDir(count *int, sourceDir string, output chan<- string) {
+func (vm *VM) loadSourceDir(count *int, sourceDir string, byteCodeDir string, output chan<- string) {
 	files, err := ioutil.ReadDir(sourceDir)
 	if err != nil {
 		panic(err.Error())
@@ -70,9 +73,9 @@ func (vm *VM) loadSourceDir(count *int, sourceDir string, output chan<- string) 
 			vm.wg.Add(1)
 			*count++
 			log.Printf("\033[32m[weblang]\033[0m Loading %v worker(goroutine) for file '%v/%v' parsing...", *count, sourceDir, file.Name())
-			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), output)
+			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, strings.Replace(file.Name(), ".web", "webc", 1)), output)
 		} else if file.IsDir() {
-			vm.loadSourceDir(count, fmt.Sprintf("%v/%v", sourceDir, file.Name()), output)
+			vm.loadSourceDir(count, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, file.Name()), output)
 		}
 	}
 }
@@ -92,14 +95,14 @@ func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string) {
 }
 
 /* load source file from disk. Still not yet fully implemented */
-func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, output chan<- string) {
+func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, byteCodeFileName string, output chan<- string) {
 	defer wg.Done()
 	data, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		panic(err.Error())
 	}
 	sourceCode := string(data)
-	err = vm.parser.Parse(sourceCode)
+	err = vm.parser.Parse(sourceCode, fileName, byteCodeFileName)
 	if err != nil {
 		panic(err.Error())
 	}
