@@ -37,7 +37,8 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 	} else {
 		return fmt.Errorf("class with name '%v' already exists", className)
 	}
-	if (*classPtr).ByteCode.Header.ClassType == class.ClassType_Object || (*classPtr).ByteCode.Header.ClassType == class.ClassType_Model {
+	if (*classPtr).ByteCode != nil && ((*classPtr).ByteCode.Header.ClassType == class.ClassType_Object ||
+		(*classPtr).ByteCode.Header.ClassType == class.ClassType_Model) {
 		return nil // if class type is model or object than no need to add obj to MemoryStack therefore we return and exit function
 	}
 	if o, found := (*parser.Stack).Objects[objName]; !found || o.Scope > 0 {
