@@ -13,8 +13,8 @@ import (
 func (parser *Parser) parseServer(sourceCode string) error {
 	var className string
 	var objName string
-	var class base.Class
-	obj := &base.Object{Class: &class, Scope: 0, Stack: parser.Stack}
+	class := &base.Class{Type: "server"}
+	obj := &base.Object{Class: class, Scope: 0, Stack: parser.Stack}
 	serverExpFull, err := parser.compileRegExp(serverRegExpFull)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (parser *Parser) parseServer(sourceCode string) error {
 	} else {
 		return errors.New("incorrect server class definition syntax")
 	}
-	return parser.pushToMap(objName, className, &class, obj)
+	return parser.pushToMap(objName, className, class, obj)
 }
 
 /* get server class namefrom source code  */
