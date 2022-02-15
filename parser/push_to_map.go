@@ -8,7 +8,6 @@ import (
 	"log"
 
 	"webimizer.dev/web/base"
-	"webimizer.dev/web/bytecode/class"
 )
 
 /* Push class to MemoryStack */
@@ -19,15 +18,18 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 	} else {
 		return fmt.Errorf("class with name '%v' already exists", className)
 	}
-	if (*parser.Server).ServerObject != nil && (*classPtr).ByteCode != nil && (*classPtr).ByteCode.Header.ClassType == class.ClassType_Server {
+	if (*parser.Server).ServerObject != nil && (*classPtr).Type == "server" {
 		return errors.New("server type class already exists")
 	}
-	if (*classPtr).ByteCode != nil && (*classPtr).ByteCode.Header.ClassType == class.ClassType_Server {
+	if (*parser.Server).RouterObject != nil && (*classPtr).Type == "router" {
+		return errors.New("router type class already exists")
+	}
+	if (*classPtr).Type == "server" {
 		(*parser.Server).ServerObject = obj
 		(*parser.Server).Host = fmt.Sprintf("%v", obj.Attributes["host"])
+		(*parser.Server).Port = obj.Attributes["port"].(int)
 	}
-	if (*classPtr).ByteCode != nil && ((*classPtr).ByteCode.Header.ClassType == class.ClassType_Object ||
-		(*classPtr).ByteCode.Header.ClassType == class.ClassType_Model) {
+	if (*classPtr).Type == "object" || (*classPtr).Type == "model" {
 		return nil // if class type is model or object than no need to add obj to MemoryStack therefore we return and exit function
 	}
 	if o, found := (*parser.Stack).Objects[objName]; !found || o.Scope > 0 {
