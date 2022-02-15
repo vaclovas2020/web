@@ -29,6 +29,9 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 		(*parser.Server).Host = fmt.Sprintf("%v", obj.Attributes["host"])
 		(*parser.Server).Port = obj.Attributes["port"].(int)
 	}
+	if (*classPtr).Type == "router" {
+		(*parser.Server).RouterObject = obj
+	}
 	if (*classPtr).Type == "object" || (*classPtr).Type == "model" {
 		return nil // if class type is model or object than no need to add obj to MemoryStack therefore we return and exit function
 	}
