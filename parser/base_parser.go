@@ -20,16 +20,43 @@ func (parser *Parser) Parse(sourceCode string, sourceFileName string, byteCodeFi
 	return parser.parseSourceCode(sourceCode, sourceFileName, byteCodeFileName)
 }
 
+/* base funxc type to define diffrent parsers */
+type parserFunc func(sourceCode string, isApplicable *bool) error
+
 /* Parse source code and append result to class map */
 func (parser *Parser) parseSourceCode(sourceCode string, sourceFileName string, byteCodeFileName string) error {
 	var err error = nil
-	var isServer bool
-	if isServer, err = parser.isServerClass(sourceCode); err == nil && isServer {
-		return parser.parseServer(sourceCode)
-	}
+	err = parser.removeComments(&sourceCode)
 	if err != nil {
 		return err
 	}
+	err = parser.parserSourceCodeInternal([]parserFunc{parserFunc(parser.serverParser)}, sourceCode)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+/* parsing source code using diffrent type parsers */
+func (parser *Parser) parserSourceCodeInternal(parserFuncArray []parserFunc, sourceCode string) error {
+	isApplicable := false
+	var err error
+	for _, p := range parserFuncArray {
+		if !isApplicable {
+			err = p(sourceCode, &isApplicable)
+		} else {
+			return err
+		}
+	}
+	return nil
+}
+
+func (parser *Parser) removeComments(sourceCode *string) error {
+	oneLineCommentsExp, err := parser.compileRegExp(regExpComments)
+	if err != nil {
+		return err
+	}
+	*sourceCode = oneLineCommentsExp.ReplaceAllString(*sourceCode, "")
 	return nil
 }
 

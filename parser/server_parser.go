@@ -9,6 +9,17 @@ import (
 	"webimizer.dev/web/base"
 )
 
+/* server class parser for use in parserFunc array */
+func (parser *Parser) serverParser(sourceCode string, isApplicable *bool) error {
+	var isServer bool
+	var err error = nil
+	if isServer, err = parser.isServerClass(sourceCode); err == nil && isServer {
+		*isApplicable = true
+		return parser.parseServer(sourceCode)
+	}
+	return err
+}
+
 /* parse server class */
 func (parser *Parser) parseServer(sourceCode string) error {
 	var className string

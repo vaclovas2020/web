@@ -2,4 +2,7 @@
 
 package parser
 
+/* class name regexp */
 const regExpClassName string = "[[:alpha:]]\\w*"
+
+const regExpComments string = "(\\/\\*([^*]|[\r\n]|(\\*+([^*\\/]|[\r\n])))*\\*+\\/)|(\\/\\/.*)"
