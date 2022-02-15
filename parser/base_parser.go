@@ -22,20 +22,22 @@ func (parser *Parser) Parse(sourceCode string, sourceFileName string, byteCodeFi
 
 /* Parse source code and append result to class map */
 func (parser *Parser) parseSourceCode(sourceCode string, sourceFileName string, byteCodeFileName string) error {
-	if parser.isServerClass(sourceCode) {
-		err := parser.parseServer(sourceCode)
-		if err != nil {
-			return err
-		}
+	var err error = nil
+	var isServer bool
+	if isServer, err = parser.isServerClass(sourceCode); err == nil && isServer {
+		return parser.parseServer(sourceCode)
+	}
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
 /* Compile regexp */
-func (parser *Parser) compileRegExp(regExp string) *regexp.Regexp {
+func (parser *Parser) compileRegExp(regExp string) (*regexp.Regexp, error) {
 	serverExpStart, err := regexp.Compile(regExp)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return serverExpStart
+	return serverExpStart, nil
 }

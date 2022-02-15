@@ -99,12 +99,12 @@ func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, byteCodeFileN
 	defer wg.Done()
 	data, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		panic(err.Error())
+		log.Fatalf("\033[33m[weblang]\033[0m %v", err.Error())
 	}
 	sourceCode := string(data)
 	err = vm.parser.Parse(sourceCode, fileName, byteCodeFileName)
 	if err != nil {
-		panic(err.Error())
+		log.Fatalf("\033[33m[weblang]\033[0m %v", err.Error())
 	}
 	output <- fmt.Sprintf("\033[32m[weblang]\033[0m Parsed file '%v'...", fileName)
 }
