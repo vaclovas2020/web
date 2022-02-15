@@ -8,7 +8,8 @@ import (
 
 /* Weblang bytecode class file generator for use in Weblang VM */
 type ByteCodeGenerator struct {
-	Class *base.Class
+	Class  *base.Class
+	Object *base.Object
 }
 
 func (generator *ByteCodeGenerator) Generate(byteCodeFileName string, sourceCodeFileName string) error {
