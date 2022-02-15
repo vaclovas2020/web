@@ -52,7 +52,7 @@ func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
 
 /* Starts server process in VM environment */
 func (vm *VM) StartServer() error {
-	if vm.server != nil {
+	if vm.server != nil && vm.server.Host != "" && vm.server.Port > 0 {
 		return vm.server.Start()
 	}
 	return nil
