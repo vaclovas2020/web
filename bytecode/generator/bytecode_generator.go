@@ -12,6 +12,7 @@ type ByteCodeGenerator struct {
 	Object *base.Object
 }
 
+/* Generate bytecode */
 func (generator *ByteCodeGenerator) Generate(byteCodeFileName string, sourceCodeFileName string) error {
 	// TODO: implement method
 	return nil
