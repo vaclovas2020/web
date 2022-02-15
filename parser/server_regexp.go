@@ -2,7 +2,7 @@
 
 package parser
 
-const serverRegExpStart string = "^(server)\\s+" + regExpClassName + "\\s*[{]\\s*"
+const serverRegExpStart string = "^\\s*(server)\\s+" + regExpClassName + "\\s*[{]\\s*"
 const serverRegExpParamName string = "(router|port|host)"
 const serverRegExpParamValueStart string = "[(]\\s*[\"]*"
 const serverRegExpParamValue string = "(\\w|[.])+"
