@@ -51,6 +51,7 @@ func (parser *Parser) parserSourceCodeInternal(parserFuncArray []parserFunc, sou
 	return nil
 }
 
+/* remove all comments (one line comments and multiple lines comments) from source code */
 func (parser *Parser) removeComments(sourceCode *string) error {
 	oneLineCommentsExp, err := parser.compileRegExp(regExpComments)
 	if err != nil {
