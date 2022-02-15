@@ -22,6 +22,7 @@ type MemoryStack struct {
 
 /* Weblang class represantation in VM */
 type Class struct {
+	Type     string              // Class type (string representation)
 	Methods  map[string]Function // Function list
 	ByteCode *bytecode.ByteCode  // Bytecode pointer
 }

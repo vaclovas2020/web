@@ -50,6 +50,14 @@ func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
 	<-done
 }
 
+/* Starts server process in VM environment */
+func (vm *VM) StartServer() error {
+	if vm.server != nil {
+		return vm.server.Start()
+	}
+	return nil
+}
+
 /* Set handler to specific class method (works with external methods only) */
 func (vm *VM) DefineFunc(className string, methodName string, handler base.FunctionHandler) {
 	if v, found := vm.stack.Classes[className].Methods[methodName]; found {
