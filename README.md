@@ -13,16 +13,15 @@ This is still very early version, so please use only for testing purposes, becau
 package main
 
 import (
-	"context"
+	"log"
 
-	"webimizer.dev/web/controller"
 	"webimizer.dev/web"
 )
 
 func main() {
 	vm := web.VM{}
 	vm.InitVM("web/src", "web/generated")
-	vm.StartServer()
+	log.Fatal(vm.StartServer())
 }
 ```
 
