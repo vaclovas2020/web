@@ -40,13 +40,14 @@ func (parser *Parser) parseSourceCode(sourceCode string, sourceFileName string, 
 /* parsing source code using diffrent type parsers */
 func (parser *Parser) parserSourceCodeInternal(parserFuncArray []parserFunc, sourceCode string) error {
 	isApplicable := false
-	var err error
+	var err error = nil
 	for _, p := range parserFuncArray {
 		if !isApplicable {
 			err = p(sourceCode, &isApplicable)
-		} else {
-			return err
 		}
+	}
+	if err != nil {
+		return err
 	}
 	return nil
 }
