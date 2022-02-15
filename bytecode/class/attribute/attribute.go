@@ -5,7 +5,7 @@ package attribute
 /* Class attributes header struct */
 type AttributeHeader struct {
 	AttributeName      [80]byte // Attribute name (max 80 symbols)
-	AttributeType      uint8    // attribute type: string, int, float bool or objectName'
+	AttributeType      uint8    // attribute type: string, int, float, bool or objectReference
 	AttributeValueSize uint64   // Data size of attribute value in bytes
 }
 
