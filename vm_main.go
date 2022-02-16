@@ -23,11 +23,11 @@ const Version string = "v0.4.1"
 type VM struct {
 	memory base.MemoryMap  // Global MemoryMap
 	parser *parser.Parser  // Global Parser
-	server *server.Server  // Global server
+	server *server.Server  // Global Server
 	wg     *sync.WaitGroup // WaitGroup for goroutines control
 }
 
-/* Initialize VM with given context and arguments. Please provide correct sourceDir (directory of Web language source files) and byteCodeDir (direcotry for bytecode files) */
+/* Initialize VM environment. Please provide correct sourceDir (directory of Web language source files) and byteCodeDir (directory for bytecode files) */
 func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
 	fmt.Println("----------------------")
 	fmt.Printf("Welcome to Weblang %v (bytecode version %v)\n\n", Version, class.ByteCodeVersion)
