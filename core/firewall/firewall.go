@@ -8,7 +8,7 @@ type Firewall struct {
 	Rules []FirewallRule // Active Firewall rules for web application
 }
 
-/* FirewallRule to take action against dangerous web attacks base of RequestUrlPattern */
+/* FirewallRule to take action against dangerous web attacks base of RequestUrlPattern and HttpMethod */
 type FirewallRule struct {
 	RequestUrlPattern string // request pattern to block
 	HttpMethod        string // Http method: GET, POST and etc.
