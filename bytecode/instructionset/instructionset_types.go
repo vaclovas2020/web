@@ -26,8 +26,8 @@ const InstructionSetType_GetCurrentRequestUrl uint16 = 0x0007
 /* Weblang Instruction type: getCurrentRequestParam(name) buil-in function to get current request parameter by name. Works only in controller class */
 const InstructionSetType_GetCurrentRequestParam uint16 = 0x0008
 
-/* Weblang Instruction type: call class method */
-const InstructionSetType_CallClassMethod uint16 = 0x0009
+/* Weblang Instruction type: call object method. At runtime would create WebCall struct and would call FunctionHandler */
+const InstructionSetType_CallObjMethod uint16 = 0x0009
 
 /* Weblang Instruction type: get binded model class. Works only with repository and controller class types */
 const InstructionSetType_GetModel uint16 = 0x000a
