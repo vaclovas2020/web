@@ -37,5 +37,5 @@ type Object struct {
 
 /* User defined function handler */
 type FunctionHandler interface {
-	Invoke(args map[string]interface{}, funcPtr *Function, obj *Object) error // Invoke function execution
+	Invoke(args map[string]interface{}, funcPtr *Function, callerObj *Object, receiverObj *Object) error // Invoke function execution
 }

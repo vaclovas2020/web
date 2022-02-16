@@ -14,7 +14,7 @@ import (
 type Handler func(rw http.ResponseWriter, r *http.Request)
 
 /* Invoke Http handler to serve request */
-func (handler Handler) Invoke(args map[string]interface{}, funcPtr *base.Function, obj *base.Object) error {
+func (handler Handler) Invoke(args map[string]interface{}, funcPtr *base.Function, callerObj *base.Object, receiverObj *base.Object) error {
 	if v, found := args["route"]; found {
 		if method, found := args["method"]; found {
 			methodStr := fmt.Sprintf("%v", method)
