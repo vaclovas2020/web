@@ -11,5 +11,7 @@ type Firewall struct {
 /* FirewallRule to take action against dangerous web attacks base of RequestUrlPattern */
 type FirewallRule struct {
 	RequestUrlPattern string // request pattern to block
+	HttpMethod        string // Http method: GET, POST and etc.
+	MinAccessCount    int    // Minimum allowed access count to resource. 0 - means take action immediately
 	Action            uint8  // block action type
 }
