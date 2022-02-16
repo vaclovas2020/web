@@ -25,7 +25,7 @@ type ClassHeader struct {
 /* Write header data to struct. Use to prepare for write header struct to file */
 func (header *ClassHeader) WriteHeader() {
 	buf := &bytes.Buffer{}
-	binary.Write(buf, binary.LittleEndian, []byte("WEBLANG\x0f"))
+	binary.Write(buf, binary.BigEndian, []byte("WEBLANG\x0f"))
 	data := buf.Bytes()
 	for i, v := range data {
 		header.FileFormatText[i] = v
