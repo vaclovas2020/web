@@ -25,7 +25,7 @@ func (parser *Parser) parseServer(sourceCode string) error {
 	var className string
 	var objName string
 	class := &base.Class{Type: "server"}
-	obj := &base.Object{Class: class, Scope: 0, Stack: parser.Stack}
+	obj := &base.Object{Class: class, Scope: 0, Memory: parser.Memory}
 	serverExpFull, err := parser.compileRegExp(serverRegExpFull)
 	if err != nil {
 		return err

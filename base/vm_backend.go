@@ -14,8 +14,8 @@ type Function struct {
 	ClassMethod *method.ClassMethod    // ClassMethod struct from bytecode file
 }
 
-/* Stack of all declared classes in VM */
-type MemoryStack struct {
+/* Memory of all declared classes in VM */
+type MemoryMap struct {
 	Classes map[string]Class  // Class list
 	Objects map[string]Object // All objects list
 }
@@ -32,7 +32,7 @@ type Object struct {
 	Scope      uint                   // Object scope, 0 - global, 1 and larger - local
 	Class      *Class                 // pointer to class struct
 	Attributes map[string]interface{} // Attributes list
-	Stack      *MemoryStack           // list of all declared global classes & objects in VM environment
+	Memory     *MemoryMap             // list of all declared global classes & objects in VM environment
 }
 
 /* User defined function handler */

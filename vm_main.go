@@ -21,10 +21,10 @@ const Version string = "v0.4.0"
 
 /* Main VM struct */
 type VM struct {
-	stack  base.MemoryStack // Global MemoryStack
-	parser *parser.Parser   // Global Parser
-	server *server.Server   // Global server
-	wg     *sync.WaitGroup  // WaitGroup for goroutines control
+	memory base.MemoryMap  // Global MemoryMap
+	parser *parser.Parser  // Global Parser
+	server *server.Server  // Global server
+	wg     *sync.WaitGroup // WaitGroup for goroutines control
 }
 
 /* Initialize VM with given context and arguments. Please provide correct sourceDir (directory of Web language source files) and byteCodeDir (direcotry for bytecode files) */
@@ -35,11 +35,11 @@ func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
 	fmt.Println("License: BSD-3-Clause License")
 	fmt.Println("----------------------")
 	log.Println("\033[32m[weblang]\033[0m Preparing VM environment...")
-	vm.stack = base.MemoryStack{}
-	vm.stack.Classes = make(map[string]base.Class)
-	vm.stack.Objects = make(map[string]base.Object)
+	vm.memory = base.MemoryMap{}
+	vm.memory.Classes = make(map[string]base.Class)
+	vm.memory.Objects = make(map[string]base.Object)
 	vm.server = &server.Server{}
-	vm.parser = &parser.Parser{Stack: &vm.stack, Server: vm.server}
+	vm.parser = &parser.Parser{Memory: &vm.memory, Server: vm.server}
 	vm.wg = &sync.WaitGroup{}
 	count := 0
 	output := make(chan string)
@@ -60,7 +60,7 @@ func (vm *VM) StartServer() error {
 
 /* Set handler to specific class method (works with external methods only) */
 func (vm *VM) DefineFunc(className string, methodName string, handler base.FunctionHandler) {
-	if v, found := vm.stack.Classes[className].Methods[methodName]; found {
+	if v, found := vm.memory.Classes[className].Methods[methodName]; found {
 		if v.ClassMethod != nil &&
 			(v.ClassMethod.MethodType == method.MethodType_ExternalPublic ||
 				v.ClassMethod.MethodType == method.MethodType_ExternalPrivate ||

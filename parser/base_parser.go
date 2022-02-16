@@ -11,8 +11,8 @@ import (
 
 /* Weblang language syntax parser */
 type Parser struct {
-	Stack  *base.MemoryStack // Global MemoryStack on WebLang VM
-	Server *server.Server    // Global server object
+	Memory *base.MemoryMap // Global MemoryMap on WebLang VM
+	Server *server.Server  // Global server object
 }
 
 /* Parse from source code or bytecode and append result to class map */

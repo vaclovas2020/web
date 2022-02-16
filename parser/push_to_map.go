@@ -10,10 +10,10 @@ import (
 	"webimizer.dev/web/base"
 )
 
-/* Push class to MemoryStack */
+/* Push class to MemoryMap */
 func (parser *Parser) pushToMap(objName string, className string, classPtr *base.Class, obj *base.Object) error {
-	if _, found := (*parser.Stack).Classes[className]; !found {
-		(*parser.Stack).Classes[className] = *classPtr
+	if _, found := (*parser.Memory).Classes[className]; !found {
+		(*parser.Memory).Classes[className] = *classPtr
 		log.Printf("\033[32m[weblang]\033[0m Loaded class '%v' to VM environment successfully", className)
 	} else {
 		return fmt.Errorf("class with name '%v' already exists", className)
@@ -33,10 +33,10 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 		(*parser.Server).RouterObject = obj
 	}
 	if (*classPtr).Type == "object" || (*classPtr).Type == "model" {
-		return nil // if class type is model or object than no need to add obj to MemoryStack therefore we return and exit function
+		return nil // if class type is model or object than no need to add obj to MemoryMap therefore we return and exit function
 	}
-	if o, found := (*parser.Stack).Objects[objName]; !found || o.Scope > 0 {
-		(*parser.Stack).Objects[objName] = *obj
+	if o, found := (*parser.Memory).Objects[objName]; !found || o.Scope > 0 {
+		(*parser.Memory).Objects[objName] = *obj
 		log.Printf("\033[32m[weblang]\033[0m Loaded %v object '%v' to VM environment successfully: %v", className, objName, (*obj).Attributes)
 		return nil
 	}
