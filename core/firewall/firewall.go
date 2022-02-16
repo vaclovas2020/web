@@ -13,6 +13,7 @@ type FirewallRule struct {
 	RequestUrlPattern string // request pattern to block
 	HttpMethod        string // Http method: GET, POST and etc.
 	MaxAllowedCount   int    // Maximum allowed access count to resource. 0 - means take action immediately
+	CountInterval     int64  // Time interval seconds until MaxAllowedCount would be valid and should increment value by one
 	Action            uint8  // block action type
 	ActionTimePeriod  int64  // time period (seconds) until action is active after web attack incident occurs. -1 means forever
 }
