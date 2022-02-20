@@ -14,6 +14,7 @@ import (
 	"webimizer.dev/webimizer"
 )
 
+/* Main server struct */
 type Server struct {
 	cms             cms.CMS      // Content Managment System
 	Host            string       // Server hostname
@@ -23,6 +24,7 @@ type Server struct {
 	RouterObject    *base.Object //  Pointer to router object in VM environment
 }
 
+/* Start server process */
 func (sr Server) Start() error {
 	webimizer.DefaultHTTPHeaders = [][]string{
 		{"x-content-type-options", "nosniff"},
@@ -34,11 +36,13 @@ func (sr Server) Start() error {
 		return err
 	}
 	log.Printf("\033[32m[weblang]\033[0m Server starting listen on %v:%v...", sr.Host, sr.Port)
+	sr.generateCmsAdminUrl()
 	return http.ListenAndServe(fmt.Sprintf("%v:%v", sr.Host, sr.Port), nil)
 }
 
-func (sr *Server) GenerateCmsAdminUrl() {
+/* Generate CMS admin url */
+func (sr *Server) generateCmsAdminUrl() {
 	adminUrl := "/admin" + uuid.New().String() + "/"
 	sr.cms = cms.CMS{AdminUrl: adminUrl}
-	log.Printf("\033[32m[weblang]\033[0m Admin CMS full url is http://%v:%v%v", sr.Host, sr.Port, adminUrl)
+	log.Printf("\033[32m[weblang]\033[0m Your admin CMS url is http://%v:%v%v", sr.Host, sr.Port, adminUrl)
 }
