@@ -1,5 +1,6 @@
 /* Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved */
 
+/* Weblang bytecode generator package */
 package generator
 
 import (

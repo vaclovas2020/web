@@ -1,5 +1,6 @@
 /* Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved */
 
+/* Class struct of Weblang bytecode */
 package class
 
 import (
