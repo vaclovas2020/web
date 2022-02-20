@@ -6,7 +6,7 @@ import (
 	"regexp"
 
 	"webimizer.dev/web/base"
-	"webimizer.dev/web/server"
+	"webimizer.dev/web/core/server"
 )
 
 /* Weblang language syntax parser */

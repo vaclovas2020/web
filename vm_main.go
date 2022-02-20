@@ -12,8 +12,8 @@ import (
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class"
 	"webimizer.dev/web/bytecode/class/method"
+	"webimizer.dev/web/core/server"
 	"webimizer.dev/web/parser"
-	"webimizer.dev/web/server"
 )
 
 /* Weblang version string */

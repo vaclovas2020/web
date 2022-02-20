@@ -1,5 +1,6 @@
 /* Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved */
 
+/* Server implemantation for use in Weblang VM runtime environment  */
 package server
 
 import (
@@ -14,7 +15,7 @@ import (
 )
 
 type Server struct {
-	cms             cms.CMS
+	cms             cms.CMS      // Content Managment System
 	Host            string       // Server hostname
 	Port            int          // Server port
 	StaticFilesPath string       // Static files path (optional)
