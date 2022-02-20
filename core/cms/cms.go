@@ -29,7 +29,7 @@ func (cms *CMS) ServeStaticFiles() error {
 		fmt.Fprint(rw, "Admin CMS not implemented yet!") // ToDo: implement CMS login page ad admin page using html/template package
 	}))
 	http.Handle(cms.AdminUrl+"static/",
-		http.StripPrefix(cms.AdminUrl+"static/",
+		http.StripPrefix(cms.AdminUrl+"static/static/",
 			webimizer.HttpHandler(func(rw http.ResponseWriter, r *http.Request) { http.FileServer(http.FS(content)).ServeHTTP(rw, r) })))
 	return nil
 }
