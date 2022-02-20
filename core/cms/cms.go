@@ -6,6 +6,7 @@ package cms
 import (
 	"embed"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"webimizer.dev/webimizer"
@@ -24,8 +25,11 @@ func (cms *CMS) ServeStaticFiles() error {
 	if cms.AdminUrl == "" {
 		return errors.New("admin url cannot be empty string")
 	}
-	http.Handle(cms.AdminUrl,
-		http.StripPrefix(cms.AdminUrl,
+	http.Handle(cms.AdminUrl, webimizer.HttpHandler(func(rw http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(rw, "Admin CMS not implemented yet!") // ToDo: implement CMS login page ad admin page using html/template package
+	}))
+	http.Handle(cms.AdminUrl+"static/",
+		http.StripPrefix(cms.AdminUrl+"static/",
 			webimizer.HttpHandler(func(rw http.ResponseWriter, r *http.Request) { http.FileServer(http.FS(content)).ServeHTTP(rw, r) })))
 	return nil
 }
