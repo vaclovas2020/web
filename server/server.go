@@ -11,10 +11,11 @@ import (
 )
 
 type Server struct {
-	Host         string
-	Port         int
-	ServerObject *base.Object
-	RouterObject *base.Object
+	Host            string       // Server hostname
+	Port            int          // Server port
+	StaticFilesPath string       // Static files path (optional)
+	ServerObject    *base.Object // Pointer to server object in VM environment
+	RouterObject    *base.Object //  Pointer to router object in VM environment
 }
 
 func (sr Server) Start() error {

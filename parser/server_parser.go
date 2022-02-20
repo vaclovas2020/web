@@ -41,6 +41,10 @@ func (parser *Parser) parseServer(sourceCode string) error {
 		if err != nil {
 			return err
 		}
+		err = parser.validateServerParams(objName, obj)
+		if err != nil {
+			return err
+		}
 	} else {
 		return errors.New("incorrect server class definition syntax")
 	}

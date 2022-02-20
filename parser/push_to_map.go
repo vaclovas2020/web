@@ -25,9 +25,7 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 		return errors.New("router type class already exists")
 	}
 	if (*classPtr).Type == "server" {
-		(*parser.Server).ServerObject = obj
-		(*parser.Server).Host = fmt.Sprintf("%v", obj.Attributes["host"])
-		(*parser.Server).Port = obj.Attributes["port"].(int)
+		parser.updateServerParams(obj)
 	}
 	if (*classPtr).Type == "router" {
 		(*parser.Server).RouterObject = obj
@@ -41,4 +39,13 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 		return nil
 	}
 	return fmt.Errorf("object with name '%v' already exists", objName)
+}
+
+func (parser *Parser) updateServerParams(obj *base.Object) {
+	(*parser.Server).ServerObject = obj
+	(*parser.Server).Host = fmt.Sprintf("%v", obj.Attributes["host"])
+	(*parser.Server).Port = obj.Attributes["port"].(int)
+	if v, exists := obj.Attributes["staticFiles"]; exists {
+		(*parser.Server).StaticFilesPath = fmt.Sprintf("%v", v)
+	}
 }
