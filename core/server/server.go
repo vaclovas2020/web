@@ -16,7 +16,7 @@ import (
 
 /* Main server struct */
 type Server struct {
-	cms             cms.CMS      // Content Managment System
+	cms             *cms.CMS     // Content Managment System
 	Host            string       // Server hostname
 	Port            int          // Server port
 	StaticFilesPath string       // Static files path (optional)
@@ -32,17 +32,17 @@ func (sr Server) Start() error {
 		{"x-xss-protection", "1; mode=block"},
 	} // define default headers
 	sr.initStaticFilesHandler()
+	log.Printf("\033[32m[weblang]\033[0m Server starting listen on %v:%v...", sr.Host, sr.Port)
+	sr.generateCmsAdminUrl()
 	if err := sr.cms.ServeStaticFiles(); err != nil {
 		return err
 	}
-	log.Printf("\033[32m[weblang]\033[0m Server starting listen on %v:%v...", sr.Host, sr.Port)
-	sr.generateCmsAdminUrl()
 	return http.ListenAndServe(fmt.Sprintf("%v:%v", sr.Host, sr.Port), nil)
 }
 
 /* Generate CMS admin url */
 func (sr *Server) generateCmsAdminUrl() {
 	adminUrl := "/admin" + uuid.New().String() + "/"
-	sr.cms = cms.CMS{AdminUrl: adminUrl}
+	sr.cms = &cms.CMS{AdminUrl: adminUrl}
 	log.Printf("\033[32m[weblang]\033[0m Your admin CMS url is http://%v:%v%v", sr.Host, sr.Port, adminUrl)
 }
