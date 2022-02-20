@@ -19,6 +19,7 @@ type Server struct {
 }
 
 func (sr Server) Start() error {
+	sr.initStaticFilesHandler()
 	log.Printf("\033[32m[weblang]\033[0m Server starting listen on %v:%v...", sr.Host, sr.Port)
 	return http.ListenAndServe(fmt.Sprintf("%v:%v", sr.Host, sr.Port), nil)
 }
