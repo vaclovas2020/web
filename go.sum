@@ -1,2 +1,4 @@
+github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
+github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 webimizer.dev/webimizer v1.2.0 h1:J0EojBAh30ho52MA22ibfgWT7AX2krQiqkf5OC0sqMI=
 webimizer.dev/webimizer v1.2.0/go.mod h1:TTpD4Tdj0cIVPQH6S9ERR/4k13S28dtIt5UfwwsAd64=
