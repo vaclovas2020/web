@@ -34,5 +34,6 @@ func (header *ClassHeader) WriteHeader() error {
 	for i, v := range data {
 		header.FileFormatText[i] = v
 	}
+	header.ByteCodeVersion = ByteCodeVersion
 	return nil
 }
