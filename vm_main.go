@@ -4,7 +4,6 @@ package web
 
 import (
 	"fmt"
-	"io/fs"
 	"io/ioutil"
 	"log"
 	"os"
@@ -91,7 +90,7 @@ func (vm *VM) loadSourceDir(count *int, sourceDir string, byteCodeDir string, ou
 			vm.wg.Add(1)
 			*count++
 			log.Printf("\033[32m[weblang]\033[0m Loading %v worker(goroutine) for file '%v/%v' parsing...", *count, sourceDir, file.Name())
-			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, strings.Replace(file.Name(), ".web", "webc", 1)), output)
+			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, strings.Replace(file.Name(), ".web", ".webc", 1)), output)
 		} else if file.IsDir() {
 			vm.loadSourceDir(count, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, file.Name()), output)
 		}
@@ -129,7 +128,7 @@ func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, byteCodeFileN
 
 func (vm *VM) makeByteCodeDir(byteCodeDir string) error {
 	if _, err := os.Stat(byteCodeDir); os.IsNotExist(err) {
-		err = os.Mkdir(byteCodeDir, fs.ModeDir)
+		err = os.Mkdir(byteCodeDir, 0755)
 		if err != nil {
 			return fmt.Errorf("failed to create bytecode dir `%v`", byteCodeDir)
 		} else {
