@@ -6,13 +6,15 @@ import (
 	"regexp"
 
 	"webimizer.dev/web/base"
+	"webimizer.dev/web/bytecode/generator"
 	"webimizer.dev/web/core/server"
 )
 
 /* Weblang language syntax parser */
 type Parser struct {
-	Memory *base.MemoryMap // Global MemoryMap on WebLang VM
-	Server *server.Server  // Global server object
+	Memory    *base.MemoryMap             // Global MemoryMap on WebLang VM
+	Server    *server.Server              // Global server object
+	generator generator.ByteCodeGenerator // ByteCodeGenerator for this class
 }
 
 /* Parse from source code or bytecode and append result to class map */
@@ -25,6 +27,7 @@ type parserFunc func(sourceCode string, isApplicable *bool) error
 
 /* Parse source code and append result to class map */
 func (parser *Parser) parseSourceCode(sourceCode string, sourceFileName string, byteCodeFileName string) error {
+	parser.generator = generator.ByteCodeGenerator{ByteCodeFileName: byteCodeFileName, SourceCodeFileName: sourceFileName}
 	var err error = nil
 	err = parser.removeComments(&sourceCode)
 	if err != nil {

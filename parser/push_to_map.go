@@ -30,13 +30,16 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 	if (*classPtr).Type == "router" {
 		(*parser.Server).RouterObject = obj
 	}
+	parser.generator.Class = classPtr
+	parser.generator.ClassName = className
 	if (*classPtr).Type == "object" || (*classPtr).Type == "model" {
-		return nil // if class type is model or object than no need to add obj to MemoryMap therefore we return and exit function
+		return parser.generator.Generate() // if class type is model or object than no need to add obj to MemoryMap therefore we return and exit function
 	}
 	if o, found := (*parser.Memory).Objects[objName]; !found || o.Scope > 0 {
 		(*parser.Memory).Objects[objName] = *obj
+		parser.generator.Object = obj
 		log.Printf("\033[32m[weblang]\033[0m Loaded %v object '%v' to VM environment successfully: %v", className, objName, (*obj).Attributes)
-		return nil
+		return parser.generator.Generate()
 	}
 	return fmt.Errorf("object with name '%v' already exists", objName)
 }

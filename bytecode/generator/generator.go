@@ -21,7 +21,7 @@ type ByteCodeGenerator struct {
 	byteBuffer         *bytes.Buffer // Write Buffer
 }
 
-/* Generate bytecode */
+/* Generate bytecode file */
 func (generator *ByteCodeGenerator) Generate() error {
 	generator.Class.ByteCode = &bytecode.ByteCode{Header: &class.ClassHeader{}}
 	generator.byteBuffer = &bytes.Buffer{}
