@@ -23,7 +23,6 @@ const Version string = "v0.5.0"
 /* Main VM struct */
 type VM struct {
 	memory base.MemoryMap          // Global MemoryMap
-	parser *parser.Parser          // Global Parser
 	server *server.Server          // Global Server
 	events map[string]EventHandler // Global events handlers map
 	wg     *sync.WaitGroup         // WaitGroup for goroutines control
@@ -45,7 +44,6 @@ func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
 	vm.memory.Classes = make(map[string]base.Class)
 	vm.memory.Objects = make(map[string]base.Object)
 	vm.server = &server.Server{}
-	vm.parser = &parser.Parser{Memory: &vm.memory, Server: vm.server}
 	vm.wg = &sync.WaitGroup{}
 	count := 0
 	output := make(chan string)
@@ -119,7 +117,8 @@ func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, byteCodeFileN
 		panic(err.Error())
 	}
 	sourceCode := string(data)
-	err = vm.parser.Parse(sourceCode, fileName, byteCodeFileName)
+	parser := &parser.Parser{Memory: &vm.memory, Server: vm.server}
+	err = parser.Parse(sourceCode, fileName, byteCodeFileName)
 	if err != nil {
 		panic(err.Error())
 	}
