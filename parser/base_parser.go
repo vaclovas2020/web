@@ -30,7 +30,9 @@ func (parser *Parser) parseSourceCode(sourceCode string, sourceFileName string, 
 	if err != nil {
 		return err
 	}
-	err = parser.parserSourceCodeInternal([]parserFunc{parserFunc(parser.serverParser)}, sourceCode)
+	err = parser.parserSourceCodeInternal([]parserFunc{
+		parserFunc(parser.serverParser),
+	}, sourceCode)
 	if err != nil {
 		return err
 	}
