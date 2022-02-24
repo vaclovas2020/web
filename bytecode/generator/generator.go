@@ -18,13 +18,13 @@ type ByteCodeGenerator struct {
 	ClassName          string        // Class name
 	ByteCodeFileName   string        // ByteCode file relative path
 	SourceCodeFileName string        // SourceCode file relative path
-	ByteBuffer         *bytes.Buffer // Write Buffer
+	byteBuffer         *bytes.Buffer // Write Buffer
 }
 
 /* Generate bytecode */
 func (generator *ByteCodeGenerator) Generate() error {
 	generator.Class.ByteCode = &bytecode.ByteCode{Header: &class.ClassHeader{}}
-	generator.ByteBuffer = &bytes.Buffer{}
+	generator.byteBuffer = &bytes.Buffer{}
 	err := generator.generateInner([]GeneratorHandler{
 		GeneratorHandler(generator.generateHeader),
 		GeneratorHandler(generator.generateClassName),

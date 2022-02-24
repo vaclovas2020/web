@@ -21,7 +21,7 @@ func (generator *ByteCodeGenerator) write() error {
 
 /* Write ClassHeader to buffer */
 func (generator *ByteCodeGenerator) writeHeader() error {
-	err := binary.Write(generator.ByteBuffer, binary.BigEndian, *generator.Class.ByteCode.Header)
+	err := binary.Write(generator.byteBuffer, binary.BigEndian, *generator.Class.ByteCode.Header)
 	if err != nil {
 		return err
 	}
@@ -30,7 +30,7 @@ func (generator *ByteCodeGenerator) writeHeader() error {
 
 /* Write buffer to file */
 func (generator *ByteCodeGenerator) writeBufferToFile() error {
-	err := ioutil.WriteFile(generator.ByteCodeFileName, generator.ByteBuffer.Bytes(), 0644)
+	err := ioutil.WriteFile(generator.ByteCodeFileName, generator.byteBuffer.Bytes(), 0644)
 	if err != nil {
 		return err
 	}
