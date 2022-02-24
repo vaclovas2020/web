@@ -30,6 +30,7 @@ func (generator *ByteCodeGenerator) Generate() error {
 		GeneratorHandler(generator.generateClassName),
 		GeneratorHandler(generator.generateClassType),
 		GeneratorHandler(generator.generateSha256Sum),
+		GeneratorHandler(generator.generateAttributesCount),
 		GeneratorHandler(generator.write),
 	})
 	if err != nil {
