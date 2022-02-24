@@ -6,7 +6,7 @@ import (
 	"webimizer.dev/web/base"
 )
 
-/* Struct for calling class method and invoke bytecode execution in VM environemt */
+/* Struct for calling class method and invoke bytecode execution in VM environment */
 type ClassMethodHandler struct{}
 
 /* Execute method bytecode in VM environemt */
