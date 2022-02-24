@@ -24,11 +24,15 @@ type ClassHeader struct {
 }
 
 /* Write header data to struct. Use to prepare for write header struct to file */
-func (header *ClassHeader) WriteHeader() {
+func (header *ClassHeader) WriteHeader() error {
 	buf := &bytes.Buffer{}
-	binary.Write(buf, binary.BigEndian, []byte("WEBLANG\x0f"))
+	err := binary.Write(buf, binary.BigEndian, []byte("WEBLANG\x0f"))
+	if err != nil {
+		return err
+	}
 	data := buf.Bytes()
 	for i, v := range data {
 		header.FileFormatText[i] = v
 	}
+	return nil
 }
