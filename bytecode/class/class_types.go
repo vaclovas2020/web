@@ -31,3 +31,6 @@ const ClassType_Cms uint8 = 0x08
 
 /* Weblang built-in class type firewall */
 const ClassType_Firewall uint8 = 0x09
+
+/* Weblang built-in class type event */
+const ClassType_Event uint8 = 0x0a
