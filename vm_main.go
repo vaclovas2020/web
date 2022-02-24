@@ -4,8 +4,10 @@ package web
 
 import (
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 	"sync"
 
@@ -36,6 +38,10 @@ func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
 	fmt.Println("License: BSD-3-Clause License")
 	fmt.Println("----------------------")
 	log.Println("\033[32m[weblang]\033[0m Preparing VM environment...")
+	err := vm.makeByteCodeDir(byteCodeDir)
+	if err != nil {
+		panic(err.Error())
+	}
 	vm.memory = base.MemoryMap{}
 	vm.memory.Classes = make(map[string]base.Class)
 	vm.memory.Objects = make(map[string]base.Object)
@@ -119,4 +125,16 @@ func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, byteCodeFileN
 		panic(err.Error())
 	}
 	output <- fmt.Sprintf("\033[32m[weblang]\033[0m Parsed file '%v'...", fileName)
+}
+
+func (vm *VM) makeByteCodeDir(byteCodeDir string) error {
+	if _, err := os.Stat(byteCodeDir); os.IsNotExist(err) {
+		err = os.Mkdir(byteCodeDir, fs.ModeDir)
+		if err != nil {
+			return fmt.Errorf("failed to create bytecode dir `%v`", byteCodeDir)
+		} else {
+			log.Printf("created bytecode dir `%v`", byteCodeDir)
+		}
+	}
+	return nil
 }
