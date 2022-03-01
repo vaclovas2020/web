@@ -4,6 +4,7 @@ package web
 
 import (
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"log"
 	"os"
@@ -18,7 +19,7 @@ import (
 )
 
 /* Weblang version string */
-const Version string = "v0.5.2"
+const Version string = "v0.5.3"
 
 /* Main VM struct */
 type VM struct {
@@ -84,15 +85,22 @@ func (vm *VM) loadSourceDir(count *int, sourceDir string, byteCodeDir string, ou
 		panic(err.Error())
 	}
 	for _, file := range files {
-		if !file.IsDir() && strings.Contains(file.Name(), ".web") {
+		if !file.IsDir() && (strings.Contains(file.Name(), ".web") || strings.Contains(file.Name(), ".weblang")) {
 			vm.wg.Add(1)
 			*count++
 			log.Printf("\033[32m[weblang]\033[0m Loading %v worker(goroutine) for file '%v/%v' parsing...", *count, sourceDir, file.Name())
-			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, strings.Replace(file.Name(), ".web", ".webc", 1)), output)
+			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, strings.Replace(file.Name(), vm.getFileExt(&file), ".webc", 1)), output)
 		} else if file.IsDir() {
 			vm.loadSourceDir(count, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, file.Name()), output)
 		}
 	}
+}
+
+func (vm *VM) getFileExt(file *fs.FileInfo) string {
+	if strings.Contains((*file).Name(), ".web") {
+		return ".web"
+	}
+	return ".weblang"
 }
 
 /* print output and/or error to screen */
