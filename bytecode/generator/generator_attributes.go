@@ -24,7 +24,7 @@ func (generator *ByteCodeGenerator) generateAttributes() error {
 		if err := generator.writeAttributeHeader(&attrHeader); err != nil {
 			return err
 		}
-		if err := generator.writeAttribute(&el); err != nil {
+		if err := generator.writeAttribute(attrName, &el); err != nil {
 			return err
 		}
 	}
@@ -73,10 +73,21 @@ func (generator *ByteCodeGenerator) writeAttributeHeader(header *attribute.Attri
 }
 
 /* Write AttributeHeader to buffer */
-func (generator *ByteCodeGenerator) writeAttribute(el *interface{}) error {
-	err := binary.Write(generator.byteBuffer, binary.BigEndian, *el)
-	if err != nil {
-		return err
+func (generator *ByteCodeGenerator) writeAttribute(attributeName string, el *interface{}) error {
+	attrType := generator.Object.AttributesType[attributeName]
+	switch attrType {
+	case attribute.AttributeType_Float:
+	case attribute.AttributeType_Int:
+		err := binary.Write(generator.byteBuffer, binary.BigEndian, *el)
+		if err != nil {
+			return err
+		}
+	case attribute.AttributeType_ObjReference:
+	case attribute.AttributeType_String:
+		err := binary.Write(generator.byteBuffer, binary.BigEndian, []byte((*el).(string)))
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

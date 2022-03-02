@@ -47,7 +47,7 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 func (parser *Parser) updateServerParams(obj *base.Object) {
 	(*parser.Server).ServerObject = obj
 	(*parser.Server).Host = fmt.Sprintf("%v", obj.Attributes["host"])
-	(*parser.Server).Port = obj.Attributes["port"].(int)
+	(*parser.Server).Port = int(obj.Attributes["port"].(int64))
 	if v, exists := obj.Attributes["staticFiles"]; exists {
 		(*parser.Server).StaticFilesPath = fmt.Sprintf("%v", v)
 	}
