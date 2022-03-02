@@ -37,9 +37,11 @@ func (generator *ByteCodeGenerator) getAttributeSize(attributeName string, el *i
 	var size uint64 = 0
 	switch attrType {
 	case attribute.AttributeType_Float:
+		size = 64
 	case attribute.AttributeType_Int:
 		size = 64
 	case attribute.AttributeType_ObjReference:
+		size = uint64(len((*el).(string)))
 	case attribute.AttributeType_String:
 		size = uint64(len((*el).(string)))
 	}
@@ -77,12 +79,20 @@ func (generator *ByteCodeGenerator) writeAttribute(attributeName string, el *int
 	attrType := generator.Object.AttributesType[attributeName]
 	switch attrType {
 	case attribute.AttributeType_Float:
+		err := binary.Write(generator.byteBuffer, binary.BigEndian, *el)
+		if err != nil {
+			return err
+		}
 	case attribute.AttributeType_Int:
 		err := binary.Write(generator.byteBuffer, binary.BigEndian, *el)
 		if err != nil {
 			return err
 		}
 	case attribute.AttributeType_ObjReference:
+		err := binary.Write(generator.byteBuffer, binary.BigEndian, []byte((*el).(string)))
+		if err != nil {
+			return err
+		}
 	case attribute.AttributeType_String:
 		err := binary.Write(generator.byteBuffer, binary.BigEndian, []byte((*el).(string)))
 		if err != nil {
