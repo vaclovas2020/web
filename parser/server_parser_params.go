@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"webimizer.dev/web/base"
+	"webimizer.dev/web/bytecode/class/attribute"
 )
 
 /* Parse server class parameters */
@@ -31,9 +32,14 @@ func (parser *Parser) parseServerParams(obj *base.Object, sourceCode string, cla
 			if err != nil {
 				return err
 			}
-			(*obj).Attributes[paramName] = intVar
+			(*obj).Attributes[paramName] = int64(intVar)
+			(*obj).AttributesType[paramName] = attribute.AttributeType_Int
+		} else if paramName == "router" {
+			(*obj).Attributes[paramName] = paramValue
+			(*obj).AttributesType[paramName] = attribute.AttributeType_ObjReference
 		} else {
 			(*obj).Attributes[paramName] = paramValue
+			(*obj).AttributesType[paramName] = attribute.AttributeType_String
 		}
 		if newSourceCode != "" {
 			return parser.parseServerParams(obj, newSourceCode, className)

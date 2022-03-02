@@ -30,10 +30,11 @@ type Class struct {
 
 /* Object struct in VM environment */
 type Object struct {
-	Scope      uint                   // Object scope, 0 - global, 1 and larger - local
-	Class      *Class                 // pointer to class struct
-	Attributes map[string]interface{} // Attributes list
-	Memory     *MemoryMap             // list of all declared global classes & objects in VM environment
+	Scope          uint                   // Object scope, 0 - global, 1 and larger - local
+	Class          *Class                 // pointer to class struct
+	Attributes     map[string]interface{} // Attributes list
+	AttributesType map[string]uint8       // Attributes type list
+	Memory         *MemoryMap             // list of all declared global classes & objects in VM environment
 }
 
 /* User defined function handler */
