@@ -19,7 +19,7 @@ import (
 )
 
 /* Weblang version string */
-const Version string = "v0.5.5"
+const Version string = "v0.5.6"
 
 /* Main VM struct */
 type VM struct {
