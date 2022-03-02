@@ -36,6 +36,7 @@ func (parser *Parser) parseServer(sourceCode string) error {
 			return err
 		}
 		obj.Attributes = make(map[string]interface{})
+		obj.AttributesType = make(map[string]uint8)
 		objName = className
 		err := parser.parseServerParams(obj, sourceCode, className)
 		if err != nil {
