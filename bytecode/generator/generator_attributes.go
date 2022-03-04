@@ -3,7 +3,6 @@
 package generator
 
 import (
-	"bytes"
 	"encoding/binary"
 	"fmt"
 
@@ -18,13 +17,16 @@ func (generator *ByteCodeGenerator) generateAttributes() error {
 			return err
 		}
 		attrHeader := attribute.AttributeHeader{AttributeType: generator.Object.AttributesType[attrName], AttributeValueSize: size}
-		if err := generator.generateAttributeName(&attrHeader, attrName); err != nil {
+		if err := generator.generateAttributeNameLength(&attrHeader, attrName); err != nil {
 			return err
 		}
 		if err := generator.writeAttributeHeader(&attrHeader); err != nil {
 			return err
 		}
-		if err := generator.writeAttribute(attrName, &el); err != nil {
+		if err := generator.writeAttributeName(&attrHeader, attrName); err != nil {
+			return err
+		}
+		if err := generator.writeAttributeValue(attrName, &el); err != nil {
 			return err
 		}
 	}
@@ -48,20 +50,24 @@ func (generator *ByteCodeGenerator) getAttributeSize(attributeName string, el *i
 	return size, nil
 }
 
-/* Set AttributeName array to Bytecode struct (max 80 symbols allowed) */
-func (generator *ByteCodeGenerator) generateAttributeName(header *attribute.AttributeHeader, attributeName string) error {
+/* Write AttributeName to byteBuffer  */
+func (generator *ByteCodeGenerator) writeAttributeName(header *attribute.AttributeHeader, attributeName string) error {
 	if len(attributeName) > 80 {
 		return fmt.Errorf("attribute name '%v' is too long (max 80 allowed)", attributeName)
 	}
-	buf := &bytes.Buffer{}
-	err := binary.Write(buf, binary.BigEndian, []byte(attributeName))
+	err := binary.Write(generator.byteBuffer, binary.BigEndian, []byte(attributeName))
 	if err != nil {
 		return err
 	}
-	data := buf.Bytes()
-	for i, v := range data {
-		header.AttributeName[i] = v
+	return nil
+}
+
+/* Write AttributeNameLength to AttributeHeader  */
+func (generator *ByteCodeGenerator) generateAttributeNameLength(header *attribute.AttributeHeader, attributeName string) error {
+	if len(attributeName) > 80 {
+		return fmt.Errorf("attribute name '%v' is too long (max 80 allowed)", attributeName)
 	}
+	header.AttributeNameLength = uint64(len(attributeName))
 	return nil
 }
 
@@ -74,8 +80,8 @@ func (generator *ByteCodeGenerator) writeAttributeHeader(header *attribute.Attri
 	return nil
 }
 
-/* Write AttributeHeader to buffer */
-func (generator *ByteCodeGenerator) writeAttribute(attributeName string, el *interface{}) error {
+/* Write Attribute Value to buffer */
+func (generator *ByteCodeGenerator) writeAttributeValue(attributeName string, el *interface{}) error {
 	attrType := generator.Object.AttributesType[attributeName]
 	switch attrType {
 	case attribute.AttributeType_Float:

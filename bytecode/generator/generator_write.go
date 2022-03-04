@@ -11,6 +11,7 @@ import (
 func (generator *ByteCodeGenerator) write() error {
 	err := generator.generateInner([]GeneratorHandler{
 		GeneratorHandler(generator.writeHeader),
+		GeneratorHandler(generator.writeClassName),
 		GeneratorHandler(generator.generateAttributes),
 		GeneratorHandler(generator.writeBufferToFile),
 	})

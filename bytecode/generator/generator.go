@@ -27,7 +27,7 @@ func (generator *ByteCodeGenerator) Generate() error {
 	generator.byteBuffer = &bytes.Buffer{}
 	err := generator.generateInner([]GeneratorHandler{
 		GeneratorHandler(generator.generateHeader),
-		GeneratorHandler(generator.generateClassName),
+		GeneratorHandler(generator.generateClassNameLength),
 		GeneratorHandler(generator.generateClassType),
 		GeneratorHandler(generator.generateSha256Sum),
 		GeneratorHandler(generator.generateAttributesCount),

@@ -3,24 +3,27 @@
 package generator
 
 import (
-	"bytes"
 	"encoding/binary"
 	"fmt"
 )
 
 /* Set ClassName array to Bytecode struct (max 80 symbols allowed) */
-func (generator *ByteCodeGenerator) generateClassName() error {
+func (generator *ByteCodeGenerator) writeClassName() error {
 	if len(generator.ClassName) > 80 {
 		return fmt.Errorf("class name '%v' is too long (max 80 allowed)", generator.ClassName)
 	}
-	buf := &bytes.Buffer{}
-	err := binary.Write(buf, binary.BigEndian, []byte(generator.ClassName))
+	err := binary.Write(generator.byteBuffer, binary.BigEndian, []byte(generator.ClassName))
 	if err != nil {
 		return err
 	}
-	data := buf.Bytes()
-	for i, v := range data {
-		generator.Class.ByteCode.Header.ClassName[i] = v
+	return nil
+}
+
+/* Set ClassName array to Bytecode struct (max 80 symbols allowed) */
+func (generator *ByteCodeGenerator) generateClassNameLength() error {
+	if len(generator.ClassName) > 80 {
+		return fmt.Errorf("class name '%v' is too long (max 80 allowed)", generator.ClassName)
 	}
+	generator.Class.ByteCode.Header.ClassNameLength = uint64(len(generator.ClassName))
 	return nil
 }
