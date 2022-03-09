@@ -4,7 +4,7 @@ package parser
 
 /* class name regexp */
 const regExpClassName string = "[[:alpha:]]\\w*"
-const regExpNamespaceName string = "(" + regExpClassName + "[\\])+"
+const regExpNamespaceName string = "(" + regExpClassName + "[\\\\]{0,1})+"
 const regExpNamespace string = "^\\s*(namespace)\\s+" + regExpClassName
 
 const regExpComments string = "(\\/\\*([^*]|[\r\n]|(\\*+([^*\\/]|[\r\n])))*\\*+\\/)|(\\/\\/.*)"
