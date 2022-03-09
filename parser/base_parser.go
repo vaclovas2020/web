@@ -15,6 +15,7 @@ type Parser struct {
 	Memory    *base.MemoryMap             // Global MemoryMap on WebLang VM
 	Server    *server.Server              // Global server object
 	generator generator.ByteCodeGenerator // ByteCodeGenerator for this class
+	Namespace string                      // class namespace (can be empty)
 }
 
 /* Parse from source code or bytecode and append result to class map */
@@ -22,8 +23,8 @@ func (parser *Parser) Parse(sourceCode string, sourceFileName string, byteCodeFi
 	return parser.parseSourceCode(sourceCode, sourceFileName, byteCodeFileName)
 }
 
-/* base funxc type to define diffrent parsers */
-type parserFunc func(sourceCode string, isApplicable *bool) error
+/* base function type to define diffrent parsers */
+type parserFunc func(sourceCode *string, isApplicable *bool) error
 
 /* Parse source code and append result to class map */
 func (parser *Parser) parseSourceCode(sourceCode string, sourceFileName string, byteCodeFileName string) error {
@@ -34,6 +35,7 @@ func (parser *Parser) parseSourceCode(sourceCode string, sourceFileName string, 
 		return err
 	}
 	err = parser.parserSourceCodeInternal([]parserFunc{
+		parserFunc(parser.parseNamespace),
 		parserFunc(parser.serverParser),
 	}, sourceCode)
 	if err != nil {
@@ -48,7 +50,7 @@ func (parser *Parser) parserSourceCodeInternal(parserFuncArray []parserFunc, sou
 	var err error = nil
 	for _, p := range parserFuncArray {
 		if !isApplicable {
-			err = p(sourceCode, &isApplicable)
+			err = p(&sourceCode, &isApplicable)
 		}
 	}
 	if err != nil {

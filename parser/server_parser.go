@@ -10,12 +10,12 @@ import (
 )
 
 /* server class parser for use in parserFunc array */
-func (parser *Parser) serverParser(sourceCode string, isApplicable *bool) error {
+func (parser *Parser) serverParser(sourceCode *string, isApplicable *bool) error {
 	var isServer bool
 	var err error = nil
-	if isServer, err = parser.isServerClass(sourceCode); err == nil && isServer {
+	if isServer, err = parser.isServerClass(*sourceCode); err == nil && isServer {
 		*isApplicable = true
-		return parser.parseServer(sourceCode)
+		return parser.parseServer(*sourceCode)
 	}
 	return err
 }

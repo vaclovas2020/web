@@ -12,6 +12,10 @@ import (
 
 /* Push class to MemoryMap */
 func (parser *Parser) pushToMap(objName string, className string, classPtr *base.Class, obj *base.Object) error {
+	if parser.Namespace != "" {
+		className = parser.Namespace + "\\" + className
+		objName = parser.Namespace + "\\" + objName
+	}
 	if _, found := (*parser.Memory).Classes[className]; !found {
 		(*parser.Memory).Classes[className] = *classPtr
 		log.Printf("\033[32m[weblang]\033[0m Loaded class '%v' to VM environment successfully", className)
