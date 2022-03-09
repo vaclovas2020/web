@@ -14,7 +14,11 @@ func (parser *Parser) parseNamespace(sourceCode *string, isApplicable *bool) err
 	if err != nil {
 		return err
 	}
-	parser.Namespace = nameSpaceName.FindString(namespaceFullStr)
+	nameSpaceStart, err := parser.compileRegExp(regExpNamespaceStart)
+	if err != nil {
+		return err
+	}
+	parser.Namespace = nameSpaceName.FindString(strings.Replace(namespaceFullStr, nameSpaceStart.FindString(namespaceFullStr), "", 1))
 	*sourceCode = strings.ReplaceAll(*sourceCode, namespaceFullStr, "")
 	return nil
 }
