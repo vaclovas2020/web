@@ -5,7 +5,7 @@ package loader
 import "os"
 
 /* Open byte code file */
-func (loader *Loader) OpenByteCodeFile() error {
+func (loader *Loader) openByteCodeFile() error {
 	file, err := os.Open(loader.ByteCodeFileName)
 	if err != nil {
 		return err
