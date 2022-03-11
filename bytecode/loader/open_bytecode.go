@@ -11,7 +11,7 @@ import (
 func (loader *Loader) openByteCodeFile() error {
 	file, err := os.Open(loader.ByteCodeFileName)
 	if err != nil {
-		return fmt.Errorf("openByteCodeFile: %v", err.Error())
+		return err
 	}
 	loader.file = file
 	stat, err := file.Stat()
