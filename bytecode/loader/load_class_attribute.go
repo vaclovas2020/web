@@ -5,7 +5,6 @@ package loader
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class/attribute"
@@ -13,15 +12,10 @@ import (
 
 /* Load class attributes from bytecode */
 func (loader *Loader) loadClassAttribute(classPtr *base.Class, objPtr *base.Object) error {
-	if loader.filePos+attribute.AttributeHeaderSize > (*loader.fileStat).Size() {
-		return fmt.Errorf("eof reached when try to read attribute header from '%v' file", loader.ByteCodeFileName)
-	}
-	data := make([]byte, attribute.AttributeHeaderSize)
-	count, err := loader.file.ReadAt(data, loader.filePos)
+	data, err := loader.readData(attribute.AttributeHeaderSize)
 	if err != nil {
 		return err
 	}
-	loader.filePos += int64(count)
 	buf := &bytes.Buffer{}
 	_, err = buf.Write(data)
 	if err != nil {

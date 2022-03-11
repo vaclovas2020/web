@@ -32,6 +32,7 @@ func (loader *Loader) parseIfValid(isValid bool, classPtr *base.Class, memory *b
 		}
 		objPtr = &base.Object{Class: classPtr, Memory: memory}
 		return isValid, loader.runLoader([]LoaderFunc{
+			LoaderFunc(loader.loadClassName),
 			LoaderFunc(loader.loadClassAttributes),
 		}, classPtr, objPtr, memory)
 	}

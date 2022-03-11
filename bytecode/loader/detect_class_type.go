@@ -9,6 +9,7 @@ import (
 	"webimizer.dev/web/bytecode/class"
 )
 
+/* Detect class type from bytecode */
 func (loader *Loader) detectClassType(classPtr *base.Class) (string, error) {
 	if classPtr.ByteCode == nil {
 		return "", errors.New("bug detected: classPtr.ByteCode is nil")

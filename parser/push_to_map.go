@@ -17,7 +17,7 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 		objName = parser.Namespace + "\\" + objName
 	}
 	if _, found := (*parser.Memory).Classes[className]; !found {
-		(*parser.Memory).Classes[className] = *classPtr
+		(*parser.Memory).Classes[className] = classPtr
 		log.Printf("\033[32m[weblang]\033[0m Loaded class '%v' to VM environment successfully", className)
 	} else {
 		return fmt.Errorf("class with name '%v' already exists", className)
@@ -40,7 +40,7 @@ func (parser *Parser) pushToMap(objName string, className string, classPtr *base
 		return parser.generator.Generate() // if class type is model or object than no need to add obj to MemoryMap therefore we return and exit function
 	}
 	if o, found := (*parser.Memory).Objects[objName]; !found || o.Scope > 0 {
-		(*parser.Memory).Objects[objName] = *obj
+		(*parser.Memory).Objects[objName] = obj
 		parser.generator.Object = obj
 		log.Printf("\033[32m[weblang]\033[0m Loaded %v object '%v' to VM environment successfully: %v", className, objName, (*obj).Attributes)
 		return parser.generator.Generate()

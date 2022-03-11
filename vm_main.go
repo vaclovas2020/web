@@ -42,8 +42,8 @@ func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
 		panic(err.Error())
 	}
 	vm.memory = base.MemoryMap{}
-	vm.memory.Classes = make(map[string]base.Class)
-	vm.memory.Objects = make(map[string]base.Object)
+	vm.memory.Classes = make(map[string]*base.Class)
+	vm.memory.Objects = make(map[string]*base.Object)
 	vm.server = &server.Server{}
 	vm.wg = &sync.WaitGroup{}
 	count := 0

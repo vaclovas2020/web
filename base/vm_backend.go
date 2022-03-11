@@ -17,8 +17,8 @@ type Function struct {
 
 /* Memory of all declared classes in VM */
 type MemoryMap struct {
-	Classes map[string]Class  // Class list
-	Objects map[string]Object // All objects list
+	Classes map[string]*Class  // Class list
+	Objects map[string]*Object // All objects list
 }
 
 /* Weblang class represantation in VM */
