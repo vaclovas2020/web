@@ -11,7 +11,7 @@ import (
 
 /* Read attribute name from bytecode */
 func (loader *Loader) readAttribute(attrPtr *attribute.Attribute, classPtr *base.Class, objPtr *base.Object) error {
-	data, err := loader.readData(int64(attrPtr.Header.AttributeNameLength))
+	data, err := loader.readData(attrPtr.Header.AttributeNameLength)
 	if err != nil {
 		return fmt.Errorf("readAttribute: %v", err.Error())
 	}

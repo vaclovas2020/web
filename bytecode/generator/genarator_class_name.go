@@ -24,6 +24,6 @@ func (generator *ByteCodeGenerator) generateClassNameLength() error {
 	if len(generator.ClassName) > 80 {
 		return fmt.Errorf("class name '%v' is too long (max 80 allowed)", generator.ClassName)
 	}
-	generator.Class.ByteCode.Header.ClassNameLength = uint64(len(generator.ClassName))
+	generator.Class.ByteCode.Header.ClassNameLength = int64(len(generator.ClassName))
 	return nil
 }

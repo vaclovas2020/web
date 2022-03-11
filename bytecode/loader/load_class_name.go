@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"webimizer.dev/web/base"
-	"webimizer.dev/web/bytecode/class/attribute"
 )
 
 /* Load class name from bytecode */
@@ -14,7 +13,7 @@ func (loader *Loader) loadClassName(classPtr *base.Class, objPtr *base.Object, m
 	if err := loader.detectBug(classPtr, objPtr, memory); err != nil {
 		return fmt.Errorf("loadClassName: %v", err.Error())
 	}
-	data, err := loader.readData(attribute.AttributeHeaderSize)
+	data, err := loader.readData(classPtr.ByteCode.Header.ClassNameLength)
 	if err != nil {
 		return fmt.Errorf("loadClassName: %v", err.Error())
 	}

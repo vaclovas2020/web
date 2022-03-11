@@ -34,18 +34,18 @@ func (generator *ByteCodeGenerator) generateAttributes() error {
 }
 
 /* Get attribute size */
-func (generator *ByteCodeGenerator) getAttributeSize(attributeName string, el *interface{}) (uint64, error) {
+func (generator *ByteCodeGenerator) getAttributeSize(attributeName string, el *interface{}) (int64, error) {
 	attrType := generator.Object.AttributesType[attributeName]
-	var size uint64 = 0
+	var size int64 = 0
 	switch attrType {
 	case attribute.AttributeType_Float:
 		size = 64
 	case attribute.AttributeType_Int:
 		size = 64
 	case attribute.AttributeType_ObjReference:
-		size = uint64(len((*el).(string)))
+		size = int64(len((*el).(string)))
 	case attribute.AttributeType_String:
-		size = uint64(len((*el).(string)))
+		size = int64(len((*el).(string)))
 	}
 	return size, nil
 }
@@ -67,7 +67,7 @@ func (generator *ByteCodeGenerator) generateAttributeNameLength(header *attribut
 	if len(attributeName) > 80 {
 		return fmt.Errorf("attribute name '%v' is too long (max 80 allowed)", attributeName)
 	}
-	header.AttributeNameLength = uint64(len(attributeName))
+	header.AttributeNameLength = int64(len(attributeName))
 	return nil
 }
 

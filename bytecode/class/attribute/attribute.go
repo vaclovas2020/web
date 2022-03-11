@@ -8,9 +8,9 @@ const AttributeHeaderSize int64 = 17
 
 /* Class attributes header struct */
 type AttributeHeader struct {
-	AttributeNameLength uint64 // Attribute name length (bytes)
-	AttributeType       uint8  // attribute type: string, int, float or objectReference
-	AttributeValueSize  uint64 // Data size of attribute value in bytes
+	AttributeNameLength int64 // Attribute name length (bytes)
+	AttributeType       uint8 // attribute type: string, int, float or objectReference
+	AttributeValueSize  int64 // Data size of attribute value in bytes
 }
 
 /* Class attribute struct */

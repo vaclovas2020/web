@@ -12,7 +12,7 @@ import (
 /* Read attribute value from bytecode */
 func (loader *Loader) readAttributeValue(attrName string, attrPtr *attribute.Attribute, classPtr *base.Class, objPtr *base.Object) error {
 	var err error = nil
-	attrPtr.Value, err = loader.readData(int64(attrPtr.Header.AttributeValueSize))
+	attrPtr.Value, err = loader.readData(attrPtr.Header.AttributeValueSize)
 	if err != nil {
 		return fmt.Errorf("readAttributeValue: %v", err.Error())
 	}
