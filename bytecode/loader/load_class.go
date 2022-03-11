@@ -20,7 +20,7 @@ func (loader *Loader) closeFile() error {
 /* Run bytcode parser if bytecode file is valid */
 func (loader *Loader) runIfValid(isValid bool, class *base.Class) error {
 	if isValid {
-		return loader.runLoader([]LoaderFunc{LoaderFunc(loader.loadClassHeader)}, class)
+		return loader.runLoader([]LoaderFunc{}, class)
 	}
 	return nil
 }

@@ -3,14 +3,23 @@
 package loader
 
 import (
+	"bytes"
 	"encoding/binary"
 
 	"webimizer.dev/web/base"
+	"webimizer.dev/web/bytecode/class"
 )
 
 /* Load bytecode to class struct */
-func (loader *Loader) loadClassHeader(class *base.Class) error {
-	err := binary.Read(loader.file, binary.BigEndian, &class.ByteCode.Header)
+func (loader *Loader) loadClassHeader(classPtr *base.Class) error {
+	data := make([]byte, class.HeaderSize)
+	count, err := loader.file.ReadAt(data, loader.filePos)
+	if err != nil {
+		return err
+	}
+	loader.filePos += int64(count)
+	buf := &bytes.Buffer{}
+	err = binary.Read(buf, binary.BigEndian, classPtr.ByteCode.Header)
 	if err != nil {
 		return err
 	}
