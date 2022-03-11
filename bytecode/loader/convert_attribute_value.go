@@ -11,6 +11,9 @@ import (
 
 /* Convert byte[] slice to variable */
 func (loader *Loader) convertAttributeValue(attrName string, attrPtr *attribute.Attribute, classPtr *base.Class, objPtr *base.Object) error {
+	if objPtr.AttributesType == nil {
+		objPtr.AttributesType = make(map[string]uint8)
+	}
 	objPtr.AttributesType[attrName] = attrPtr.Header.AttributeType
 	switch attrPtr.Header.AttributeType {
 	case attribute.AttributeType_Int:

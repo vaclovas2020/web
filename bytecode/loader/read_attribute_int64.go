@@ -25,6 +25,9 @@ func (loader *Loader) readAttributeInt64(attrName string, attrPtr *attribute.Att
 	if err != nil {
 		return fmt.Errorf("readAttributeInt64: %v", err.Error())
 	}
+	if objPtr.Attributes == nil {
+		objPtr.Attributes = make(map[string]interface{})
+	}
 	objPtr.Attributes[attrName] = value
 	return nil
 }

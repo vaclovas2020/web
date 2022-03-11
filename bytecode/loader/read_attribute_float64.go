@@ -26,6 +26,9 @@ func (loader *Loader) readAttributeFloat64(attrName string, attrPtr *attribute.A
 	if err != nil {
 		return fmt.Errorf("readAttributeFloat64: %v", err.Error())
 	}
+	if objPtr.Attributes == nil {
+		objPtr.Attributes = make(map[string]interface{})
+	}
 	objPtr.Attributes[attrName] = value
 	return nil
 }

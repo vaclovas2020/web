@@ -13,6 +13,9 @@ func (loader *Loader) readAttributeString(attrName string, attrPtr *attribute.At
 	if attrPtr == nil {
 		return errors.New("readAttributeString: attrPtr is nil")
 	}
+	if objPtr.Attributes == nil {
+		objPtr.Attributes = make(map[string]interface{})
+	}
 	objPtr.Attributes[attrName] = string(attrPtr.Value)
 	return nil
 }
