@@ -3,6 +3,8 @@
 package loader
 
 import (
+	"fmt"
+
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class/attribute"
 )
@@ -14,7 +16,7 @@ func (loader *Loader) loadClassName(classPtr *base.Class, objPtr *base.Object, m
 	}
 	data, err := loader.readData(attribute.AttributeHeaderSize)
 	if err != nil {
-		return err
+		return fmt.Errorf("loadClassName: %v", err.Error())
 	}
 	nameStr := string(data)
 	err = loader.writeToMemory(nameStr, classPtr, objPtr, memory)

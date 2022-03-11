@@ -3,6 +3,8 @@
 package loader
 
 import (
+	"fmt"
+
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class/attribute"
 )
@@ -12,7 +14,7 @@ func (loader *Loader) readAttributeValue(attrName string, attrPtr *attribute.Att
 	var err error = nil
 	attrPtr.Value, err = loader.readData(int64(attrPtr.Header.AttributeValueSize))
 	if err != nil {
-		return err
+		return fmt.Errorf("readAttributeValue: %v", err.Error())
 	}
 	if err := loader.convertAttributeValue(attrName, attrPtr, classPtr, objPtr); err != nil {
 		return err

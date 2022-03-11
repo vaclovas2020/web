@@ -5,6 +5,7 @@ package loader
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class/attribute"
@@ -14,7 +15,7 @@ import (
 func (loader *Loader) loadClassAttribute(classPtr *base.Class, objPtr *base.Object) error {
 	data, err := loader.readData(attribute.AttributeHeaderSize)
 	if err != nil {
-		return err
+		return fmt.Errorf("loadClassAttribute: %v", err.Error())
 	}
 	buf := &bytes.Buffer{}
 	_, err = buf.Write(data)

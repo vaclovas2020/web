@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
 
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode"
@@ -20,7 +21,7 @@ func (loader *Loader) loadClassHeader(classPtr *base.Class) error {
 	classPtr.ByteCode = &bytecode.ByteCode{Header: &class.ClassHeader{}}
 	data, err := loader.readData(class.HeaderSize)
 	if err != nil {
-		return err
+		return fmt.Errorf("loadClassHeader: %v", err.Error())
 	}
 	buf := &bytes.Buffer{}
 	_, err = buf.Write(data)
