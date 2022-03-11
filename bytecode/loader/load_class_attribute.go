@@ -32,6 +32,10 @@ func (loader *Loader) loadClassAttribute(classPtr *base.Class, objPtr *base.Obje
 		return err
 	}
 	attrPtr := &attribute.Attribute{Header: attrHeader}
+	if objPtr == nil {
+		classPtr.ByteCode.Attribute = append(classPtr.ByteCode.Attribute, attrPtr)
+		return nil
+	}
 	if err := loader.readAttribute(attrPtr, classPtr, objPtr); err != nil {
 		return err
 	}

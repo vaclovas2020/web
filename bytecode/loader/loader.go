@@ -20,11 +20,12 @@ type Loader struct {
 
 /* Load and fully parse bytecode data to *base.Class and *base.Object */
 /* obj can be nil */
-func (loader *Loader) LoadClassAndObject(class *base.Class, obj *base.Object) (bool, error) {
-	isValid, err := loader.isValidByteCode(class)
+func (loader *Loader) LoadClassAndObject(memory *base.MemoryMap) (bool, error) {
+	classPtr := &base.Class{}
+	isValid, err := loader.isValidByteCode(classPtr)
 	defer loader.closeFile()
 	if err != nil {
 		return false, err
 	}
-	return loader.runIfValid(isValid, class, obj)
+	return loader.parseIfValid(isValid, classPtr, memory)
 }
