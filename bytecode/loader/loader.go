@@ -20,24 +20,23 @@ type Loader struct {
 }
 
 /* Is valid bytecode file for use in VM environment */
-func (loader *Loader) IsValidByteCode() (bool, error) {
-	bytecodeFile, err := os.Open(loader.ByteCodeFileName)
+func (loader *Loader) isValidByteCode() (bool, error) {
+	err := loader.openByteCodeFile()
 	if os.IsNotExist(err) {
 		return false, nil
 	}
 	if err != nil {
 		return false, err
 	}
-	defer bytecodeFile.Close() // Close bytecode file at the end no matter what
 	sourceCode, err := os.ReadFile(loader.SourceCodeFileName)
 	if err != nil {
 		return false, err
 	}
 	sha256Source := sha256.Sum256(sourceCode)
 	header := class.ClassHeader{}
-	err = binary.Read(bytecodeFile, binary.BigEndian, &header)
+	err = binary.Read(loader.file, binary.BigEndian, &header)
 	if err != nil {
 		return false, err
 	}
-	return (bytes.Equal(sha256Source[:], header.SourceCodeHash[:])), nil
+	return bytes.Equal(sha256Source[:], header.SourceCodeHash[:]), nil
 }
