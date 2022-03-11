@@ -16,7 +16,7 @@ import (
 /* Load bytecode to class struct */
 func (loader *Loader) loadClassHeader(classPtr *base.Class) error {
 	if classPtr == nil {
-		return errors.New("bug detected: classPtr is nil")
+		return errors.New("loadClassHeader: classPtr is nil")
 	}
 	classPtr.ByteCode = &bytecode.ByteCode{Header: &class.ClassHeader{}}
 	data, err := loader.readData(class.HeaderSize)
@@ -26,11 +26,11 @@ func (loader *Loader) loadClassHeader(classPtr *base.Class) error {
 	buf := &bytes.Buffer{}
 	_, err = buf.Write(data)
 	if err != nil {
-		return err
+		return fmt.Errorf("loadClassHeader: %v", err.Error())
 	}
 	err = binary.Read(buf, binary.BigEndian, classPtr.ByteCode.Header)
 	if err != nil {
-		return err
+		return fmt.Errorf("loadClassHeader: %v", err.Error())
 	}
 	return nil
 }

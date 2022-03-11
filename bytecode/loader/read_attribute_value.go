@@ -17,7 +17,7 @@ func (loader *Loader) readAttributeValue(attrName string, attrPtr *attribute.Att
 		return fmt.Errorf("readAttributeValue: %v", err.Error())
 	}
 	if err := loader.convertAttributeValue(attrName, attrPtr, classPtr, objPtr); err != nil {
-		return err
+		return fmt.Errorf("readAttributeValue: %v", err.Error())
 	}
 	return nil
 }

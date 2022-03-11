@@ -11,7 +11,7 @@ import (
 
 func (loader *Loader) readAttributeString(attrName string, attrPtr *attribute.Attribute, objPtr *base.Object) error {
 	if attrPtr == nil {
-		return errors.New("bug detected: attrPtr is nil")
+		return errors.New("readAttributeString: attrPtr is nil")
 	}
 	objPtr.Attributes[attrName] = string(attrPtr.Value)
 	return nil

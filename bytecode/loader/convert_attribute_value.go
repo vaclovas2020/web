@@ -3,6 +3,8 @@
 package loader
 
 import (
+	"fmt"
+
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class/attribute"
 )
@@ -14,22 +16,22 @@ func (loader *Loader) convertAttributeValue(attrName string, attrPtr *attribute.
 	case attribute.AttributeType_Int:
 		err := loader.readAttributeInt64(attrName, attrPtr, objPtr)
 		if err != nil {
-			return err
+			return fmt.Errorf("convertAttributeValue: %v", err.Error())
 		}
 	case attribute.AttributeType_Float:
 		err := loader.readAttributeFloat64(attrName, attrPtr, objPtr)
 		if err != nil {
-			return err
+			return fmt.Errorf("convertAttributeValue: %v", err.Error())
 		}
 	case attribute.AttributeType_String:
 		err := loader.readAttributeString(attrName, attrPtr, objPtr)
 		if err != nil {
-			return err
+			return fmt.Errorf("convertAttributeValue: %v", err.Error())
 		}
 	case attribute.AttributeType_ObjReference:
 		err := loader.readAttributeString(attrName, attrPtr, objPtr)
 		if err != nil {
-			return err
+			return fmt.Errorf("convertAttributeValue: %v", err.Error())
 		}
 	}
 	return nil

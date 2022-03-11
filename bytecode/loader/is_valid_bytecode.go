@@ -5,6 +5,7 @@ package loader
 import (
 	"bytes"
 	"crypto/sha256"
+	"fmt"
 	"os"
 
 	"webimizer.dev/web/base"
@@ -18,16 +19,16 @@ func (loader *Loader) isValidByteCode(class *base.Class) (bool, error) {
 		return false, nil
 	}
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("isValidByteCode: %v", err.Error())
 	}
 	sourceCode, err := os.ReadFile(loader.SourceCodeFileName)
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("isValidByteCode: %v", err.Error())
 	}
 	sha256Source := sha256.Sum256(sourceCode)
 	err = loader.loadClassHeader(class)
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("isValidByteCode: %v", err.Error())
 	}
 	return bytes.Equal(sha256Source[:], class.ByteCode.Header.SourceCodeHash[:]), nil
 }

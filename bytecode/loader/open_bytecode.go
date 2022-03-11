@@ -2,18 +2,21 @@
 
 package loader
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 /* Open bytecode file */
 func (loader *Loader) openByteCodeFile() error {
 	file, err := os.Open(loader.ByteCodeFileName)
 	if err != nil {
-		return err
+		return fmt.Errorf("openByteCodeFile: %v", err.Error())
 	}
 	loader.file = file
 	stat, err := file.Stat()
 	if err != nil {
-		return err
+		return fmt.Errorf("openByteCodeFile: %v", err.Error())
 	}
 	loader.fileStat = &stat
 	return nil

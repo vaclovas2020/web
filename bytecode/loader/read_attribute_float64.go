@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
 
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class/attribute"
@@ -13,17 +14,17 @@ import (
 
 func (loader *Loader) readAttributeFloat64(attrName string, attrPtr *attribute.Attribute, objPtr *base.Object) error {
 	if attrPtr == nil {
-		return errors.New("bug detected: attrPtr is nil")
+		return errors.New("readAttributeFloat64: attrPtr is nil")
 	}
 	buf := &bytes.Buffer{}
 	_, err := buf.Write(attrPtr.Value)
 	if err != nil {
-		return err
+		return fmt.Errorf("readAttributeFloat64: %v", err.Error())
 	}
 	var value float64
 	err = binary.Read(buf, binary.BigEndian, &value)
 	if err != nil {
-		return err
+		return fmt.Errorf("readAttributeFloat64: %v", err.Error())
 	}
 	objPtr.Attributes[attrName] = value
 	return nil

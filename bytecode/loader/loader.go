@@ -4,6 +4,7 @@
 package loader
 
 import (
+	"fmt"
 	"os"
 
 	"webimizer.dev/web/base"
@@ -25,7 +26,7 @@ func (loader *Loader) LoadClassAndObject(memory *base.MemoryMap) (bool, error) {
 	isValid, err := loader.isValidByteCode(classPtr)
 	defer loader.closeFile()
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("LoadClassAndObject: %v", err.Error())
 	}
 	return loader.parseIfValid(isValid, classPtr, memory)
 }

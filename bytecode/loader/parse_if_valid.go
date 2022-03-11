@@ -3,6 +3,8 @@
 package loader
 
 import (
+	"fmt"
+
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class"
 )
@@ -24,7 +26,7 @@ func (loader *Loader) parseIfValid(isValid bool, classPtr *base.Class, memory *b
 		var err error = nil
 		classPtr.Type, err = loader.detectClassType(classPtr)
 		if err != nil {
-			return false, err
+			return false, fmt.Errorf("parseIfValid: %v", err.Error())
 		}
 		var objPtr *base.Object
 		if classPtr.ByteCode.Header.ClassType == class.ClassType_Object || classPtr.ByteCode.Header.ClassType == class.ClassType_Model {

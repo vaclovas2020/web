@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
 
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class/attribute"
@@ -13,16 +14,16 @@ import (
 
 func (loader *Loader) readAttributeInt64(attrName string, attrPtr *attribute.Attribute, objPtr *base.Object) error {
 	if attrPtr == nil {
-		return errors.New("bug detected: attrPtr is nil")
+		return errors.New("readAttributeInt64: attrPtr is nil")
 	}
 	buf := &bytes.Buffer{}
 	_, err := buf.Write(attrPtr.Value)
 	if err != nil {
-		return err
+		return fmt.Errorf("readAttributeInt64: %v", err.Error())
 	}
 	value, err := binary.ReadVarint(buf)
 	if err != nil {
-		return err
+		return fmt.Errorf("readAttributeInt64: %v", err.Error())
 	}
 	objPtr.Attributes[attrName] = value
 	return nil

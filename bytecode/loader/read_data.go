@@ -11,7 +11,7 @@ func (loader *Loader) readData(size int64) ([]byte, error) {
 	data := make([]byte, size)
 	count, err := loader.file.ReadAt(data, loader.filePos)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("readData: %v", err.Error())
 	}
 	loader.filePos += int64(count)
 	return data, nil

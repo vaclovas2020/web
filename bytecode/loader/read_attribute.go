@@ -16,7 +16,7 @@ func (loader *Loader) readAttribute(attrPtr *attribute.Attribute, classPtr *base
 		return fmt.Errorf("readAttribute: %v", err.Error())
 	}
 	if err := loader.readAttributeValue(string(data), attrPtr, classPtr, objPtr); err != nil {
-		return err
+		return fmt.Errorf("readAttribute: %v", err.Error())
 	}
 	return nil
 }
