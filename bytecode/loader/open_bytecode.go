@@ -11,5 +11,10 @@ func (loader *Loader) openByteCodeFile() error {
 		return err
 	}
 	loader.file = file
+	stat, err := file.Stat()
+	if err != nil {
+		return err
+	}
+	loader.fileStat = &stat
 	return nil
 }

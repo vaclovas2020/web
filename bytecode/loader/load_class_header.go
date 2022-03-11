@@ -19,6 +19,10 @@ func (loader *Loader) loadClassHeader(classPtr *base.Class) error {
 	}
 	loader.filePos += int64(count)
 	buf := &bytes.Buffer{}
+	_, err = buf.Write(data)
+	if err != nil {
+		return err
+	}
 	err = binary.Read(buf, binary.BigEndian, classPtr.ByteCode.Header)
 	if err != nil {
 		return err

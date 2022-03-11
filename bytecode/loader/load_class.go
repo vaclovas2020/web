@@ -7,7 +7,7 @@ import (
 )
 
 /* Bytecode loader handler function */
-type LoaderFunc func(class *base.Class) error
+type LoaderFunc func(class *base.Class, obj *base.Object) error
 
 /* Close bytecode file */
 func (loader *Loader) closeFile() error {
@@ -18,9 +18,11 @@ func (loader *Loader) closeFile() error {
 }
 
 /* Run bytcode parser if bytecode file is valid */
-func (loader *Loader) runIfValid(isValid bool, class *base.Class) error {
+func (loader *Loader) runIfValid(isValid bool, class *base.Class, obj *base.Object) (bool, error) {
 	if isValid {
-		return loader.runLoader([]LoaderFunc{}, class)
+		return isValid, loader.runLoader([]LoaderFunc{
+			LoaderFunc(loader.loadClassAttributes),
+		}, class, obj)
 	}
-	return nil
+	return isValid, nil
 }
