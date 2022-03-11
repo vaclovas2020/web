@@ -14,13 +14,17 @@ import (
 
 /* Bytecode loader */
 type Loader struct {
-	SourceCodeFileName string // Source code file name
-	ByteCodeFileName   string // Byte code file name
+	SourceCodeFileName string   // Source code file name
+	ByteCodeFileName   string   // Byte code file name
+	file               *os.File // Bytecode file reader
 }
 
 /* Is valid bytecode file for use in VM environment */
 func (loader *Loader) IsValidByteCode() (bool, error) {
 	bytecodeFile, err := os.Open(loader.ByteCodeFileName)
+	if os.IsNotExist(err) {
+		return false, nil
+	}
 	if err != nil {
 		return false, err
 	}
@@ -31,7 +35,7 @@ func (loader *Loader) IsValidByteCode() (bool, error) {
 	}
 	sha256Source := sha256.Sum256(sourceCode)
 	header := class.ClassHeader{}
-	err = binary.Read(bytecodeFile, binary.BigEndian, header)
+	err = binary.Read(bytecodeFile, binary.BigEndian, &header)
 	if err != nil {
 		return false, err
 	}
