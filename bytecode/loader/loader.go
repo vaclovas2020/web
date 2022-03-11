@@ -4,12 +4,9 @@
 package loader
 
 import (
-	"bytes"
-	"crypto/sha256"
-	"encoding/binary"
 	"os"
 
-	"webimizer.dev/web/bytecode/class"
+	"webimizer.dev/web/base"
 )
 
 /* Bytecode loader */
@@ -19,24 +16,12 @@ type Loader struct {
 	file               *os.File // Bytecode file reader
 }
 
-/* Is valid bytecode file for use in VM environment */
-func (loader *Loader) isValidByteCode() (bool, error) {
-	err := loader.openByteCodeFile()
-	if os.IsNotExist(err) {
-		return false, nil
-	}
+/* Load and fully parse bytecode data to *base.Class */
+func (loader *Loader) LoadClass(class *base.Class) error {
+	isValid, err := loader.isValidByteCode()
+	defer loader.closeFile()
 	if err != nil {
-		return false, err
+		return err
 	}
-	sourceCode, err := os.ReadFile(loader.SourceCodeFileName)
-	if err != nil {
-		return false, err
-	}
-	sha256Source := sha256.Sum256(sourceCode)
-	header := class.ClassHeader{}
-	err = binary.Read(loader.file, binary.BigEndian, &header)
-	if err != nil {
-		return false, err
-	}
-	return bytes.Equal(sha256Source[:], header.SourceCodeHash[:]), nil
+	return loader.runIfValid(isValid, class)
 }
