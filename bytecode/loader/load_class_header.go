@@ -21,16 +21,16 @@ func (loader *Loader) loadClassHeader(classPtr *base.Class) error {
 	classPtr.ByteCode = &bytecode.ByteCode{Header: &class.ClassHeader{}}
 	data, err := loader.readData(class.HeaderSize)
 	if err != nil {
-		return fmt.Errorf("loadClassHeader: %v", err.Error())
+		return fmt.Errorf("loadClassHeader: loader.readData %v", err.Error())
 	}
 	buf := &bytes.Buffer{}
 	_, err = buf.Write(data)
 	if err != nil {
-		return fmt.Errorf("loadClassHeader: %v", err.Error())
+		return fmt.Errorf("loadClassHeader: buf.Write(data) %v", err.Error())
 	}
 	err = binary.Read(buf, binary.BigEndian, classPtr.ByteCode.Header)
 	if err != nil {
-		return fmt.Errorf("loadClassHeader: %v", err.Error())
+		return fmt.Errorf("loadClassHeader: binary.Read %v", err.Error())
 	}
 	return nil
 }
