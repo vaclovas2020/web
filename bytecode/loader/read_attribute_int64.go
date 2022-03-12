@@ -21,7 +21,8 @@ func (loader *Loader) readAttributeInt64(attrName string, attrPtr *attribute.Att
 	if err != nil {
 		return fmt.Errorf("readAttributeInt64: %v", err.Error())
 	}
-	value, err := binary.ReadVarint(buf)
+	var value int64
+	err = binary.Read(buf, binary.BigEndian, &value)
 	if err != nil {
 		return fmt.Errorf("readAttributeInt64: %v", err.Error())
 	}
