@@ -9,7 +9,7 @@ import (
 )
 
 /* Constant for current Weblang  bytecode version */
-const ByteCodeVersion uint16 = 0x0004
+const ByteCodeVersion uint16 = 0x0005
 const HeaderSize int64 = 75
 
 /* Header struct for Weblang bytecode class file. Binary data block size: 75 bytes */
@@ -20,7 +20,7 @@ type ClassHeader struct {
 	ClassNameLength     int64    // Class name length (bytes)
 	InstructionSetCount uint64   // Count of InstructionSet struct
 	ClassMethodsCount   uint64   // Count of ClassMethodHeader struct
-	AttributesCount     uint64   // Count of declared class atributes
+	AttributesCount     int64    // Count of declared class atributes
 	SourceCodeHash      [32]byte // Sha-256 hash of sourcecode file. For sourcefile changes detection
 }
 
