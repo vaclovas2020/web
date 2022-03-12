@@ -13,6 +13,10 @@ func (loader *Loader) loadClassAttributes(classPtr *base.Class, objPtr *base.Obj
 	if err := loader.detectBug(classPtr, objPtr, memory); err != nil {
 		return fmt.Errorf("loadClassAttributes: %v", err.Error())
 	}
+	if objPtr != nil {
+		objPtr.Attributes = make(map[string]interface{})
+		objPtr.AttributesType = make(map[string]uint8)
+	}
 	for i := int64(0); i < classPtr.ByteCode.Header.AttributesCount; i++ {
 		if err := loader.loadClassAttribute(classPtr, objPtr); err != nil {
 			return fmt.Errorf("loadClassAttribute %v: %v", i, err.Error())
