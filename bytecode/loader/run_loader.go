@@ -15,6 +15,7 @@ func (loader *Loader) runLoader(handlers []LoaderFunc, class *base.Class, obj *b
 		if err != nil {
 			return fmt.Errorf("runLoader: %v", err.Error())
 		}
+		loader.updateServerParams(obj)
 	}
 	return nil
 }
