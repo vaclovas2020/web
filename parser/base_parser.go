@@ -31,7 +31,7 @@ type parserFunc func(sourceCode *string, isApplicable *bool) error
 /* Parse source code and append result to class map */
 func (parser *Parser) parseSourceCode(sourceCode string, sourceFileName string, byteCodeFileName string) error {
 	var err error = nil
-	parser.loader = loader.Loader{SourceCodeFileName: sourceFileName, ByteCodeFileName: byteCodeFileName}
+	parser.loader = loader.Loader{SourceCodeFileName: sourceFileName, ByteCodeFileName: byteCodeFileName, Server: parser.Server}
 	success, err := parser.loader.LoadClassAndObject(parser.Memory)
 	if err != nil {
 		return err
