@@ -9,10 +9,10 @@ func (loader *Loader) readData(size int64) ([]byte, error) {
 		return nil, fmt.Errorf("EOF reached when try to read from '%v' file", loader.ByteCodeFileName)
 	}
 	data := make([]byte, size)
-	count, err := loader.file.ReadAt(data, loader.filePos)
+	_, err := loader.file.ReadAt(data, loader.filePos)
 	if err != nil {
 		return nil, fmt.Errorf("readData: %v", err.Error())
 	}
-	loader.filePos += int64(count)
+	loader.filePos += size
 	return data, nil
 }
