@@ -4,6 +4,7 @@ package loader
 
 import (
 	"fmt"
+	"log"
 
 	"webimizer.dev/web/base"
 )
@@ -17,5 +18,6 @@ func (loader *Loader) runLoader(handlers []LoaderFunc, class *base.Class, obj *b
 		}
 		loader.updateServerParams(obj)
 	}
+	log.Printf("\033[32m[weblang]\033[0m Loaded bytecode instructions to memory from bytecode file %v", loader.ByteCodeFileName)
 	return nil
 }
