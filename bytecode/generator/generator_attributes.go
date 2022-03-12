@@ -4,7 +4,6 @@ package generator
 
 import (
 	"encoding/binary"
-	"fmt"
 
 	"webimizer.dev/web/bytecode/class/attribute"
 )
@@ -39,9 +38,9 @@ func (generator *ByteCodeGenerator) getAttributeSize(attributeName string, el *i
 	var size int64 = 0
 	switch attrType {
 	case attribute.AttributeType_Float:
-		size = 64
+		size = 8
 	case attribute.AttributeType_Int:
-		size = 64
+		size = 8
 	case attribute.AttributeType_ObjReference:
 		size = int64(len((*el).(string)))
 	case attribute.AttributeType_String:
@@ -52,9 +51,6 @@ func (generator *ByteCodeGenerator) getAttributeSize(attributeName string, el *i
 
 /* Write AttributeName to byteBuffer  */
 func (generator *ByteCodeGenerator) writeAttributeName(header *attribute.AttributeHeader, attributeName string) error {
-	if len(attributeName) > 80 {
-		return fmt.Errorf("attribute name '%v' is too long (max 80 allowed)", attributeName)
-	}
 	err := binary.Write(generator.byteBuffer, binary.BigEndian, []byte(attributeName))
 	if err != nil {
 		return err
@@ -64,9 +60,6 @@ func (generator *ByteCodeGenerator) writeAttributeName(header *attribute.Attribu
 
 /* Write AttributeNameLength to AttributeHeader  */
 func (generator *ByteCodeGenerator) generateAttributeNameLength(header *attribute.AttributeHeader, attributeName string) error {
-	if len(attributeName) > 80 {
-		return fmt.Errorf("attribute name '%v' is too long (max 80 allowed)", attributeName)
-	}
 	header.AttributeNameLength = int64(len(attributeName))
 	return nil
 }
