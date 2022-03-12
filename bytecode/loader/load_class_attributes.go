@@ -15,7 +15,7 @@ func (loader *Loader) loadClassAttributes(classPtr *base.Class, objPtr *base.Obj
 	}
 	for i := int64(0); i < classPtr.ByteCode.Header.AttributesCount; i++ {
 		if err := loader.loadClassAttribute(classPtr, objPtr); err != nil {
-			return fmt.Errorf("loadClassAttributes: %v", err.Error())
+			return fmt.Errorf("loadClassAttribute %v: %v", i, err.Error())
 		}
 	}
 	return nil
