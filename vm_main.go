@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 
+	"gopkg.in/yaml.v2"
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class"
 	"webimizer.dev/web/bytecode/class/method"
@@ -27,17 +28,25 @@ type VM struct {
 	server *server.Server          // Global Server
 	events map[string]EventHandler // Global events handlers map
 	wg     *sync.WaitGroup         // WaitGroup for goroutines control
+	config *Config                 // Yaml parsed Config struct pointer
 }
 
-/* Initialize VM environment. Please provide correct sourceDir (directory of Web language source files) and byteCodeDir (directory for bytecode files) */
-func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
+// Weblang now require configuration file weblang.yml in your project directory to work correctly.
+// Initialize VM environment. Please provide correct configFile (config file name).
+func (vm *VM) InitVM(configFile string) {
 	fmt.Println("----------------------")
 	fmt.Printf("Welcome to Weblang %v (bytecode version %v)\n\n", Version, class.ByteCodeVersion)
 	fmt.Println("Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved.")
 	fmt.Println("License: BSD-3-Clause License")
 	fmt.Println("----------------------")
-	log.Println("\033[32m[weblang]\033[0m Preparing VM environment...")
-	err := vm.makeByteCodeDir(byteCodeDir)
+	err := vm.parseConfig(configFile)
+	if err != nil {
+		panic(err.Error())
+	}
+	sourceDir := vm.config.Project.Directories.SourceDir
+	byteCodeDir := vm.config.Project.Directories.BytecodeDir
+	log.Printf("\033[32m[weblang]\033[0m Starting application %v v%v in safe VM environment", vm.config.Project.Name, vm.config.Project.Version)
+	err = vm.makeByteCodeDir(byteCodeDir)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -53,6 +62,20 @@ func (vm *VM) InitVM(sourceDir string, byteCodeDir string) {
 	done := make(chan bool, 1)
 	go vm.printWorker(count, output, done)
 	<-done
+}
+
+/* Parse weblang.yml config file  */
+func (vm *VM) parseConfig(configFile string) error {
+	data, err := ioutil.ReadFile(configFile)
+	if err != nil {
+		return err
+	}
+	vm.config = &Config{}
+	err = yaml.Unmarshal(data, vm.config)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 /* Starts server process in VM environment */
