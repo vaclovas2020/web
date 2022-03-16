@@ -20,7 +20,7 @@ import (
 
 func main() {
 	vm := web.VM{}
-	vm.InitVM("web/src", "web/generated")
+	vm.InitVM("weblang.yml")
 	log.Fatal(vm.StartServer())
 }
 ```
