@@ -24,7 +24,7 @@ import (
 )
 
 /* Weblang version string */
-const Version string = "v0.6.25"
+const Version string = "v0.6.26"
 
 /* Main VM struct */
 type VM struct {
@@ -93,6 +93,7 @@ func (vm *VM) StartServer() error {
 	return nil
 }
 
+/* Clone git repository to gitLocalDir and listen request from webHook url for git changes */
 func (vm *VM) GitPreperWebHook(gitUrl string, gitUser string, gitToken string, gitLocalDir string, gitWebHook string) error {
 	if _, err := os.Stat(gitLocalDir); os.IsNotExist(err) {
 		_, err = git.PlainClone(gitLocalDir, false, &git.CloneOptions{
@@ -109,7 +110,7 @@ func (vm *VM) GitPreperWebHook(gitUrl string, gitUser string, gitToken string, g
 	}
 	http.Handle(gitWebHook, webimizer.HttpHandlerStruct{
 		Handler: webimizer.HttpHandler(func(rw http.ResponseWriter, r *http.Request) {
-			repository, err := git.PlainOpen("/go/bin/resources")
+			repository, err := git.PlainOpen(gitLocalDir)
 			if err != nil {
 				log.Fatal(err)
 			}
