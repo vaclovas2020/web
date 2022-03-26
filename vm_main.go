@@ -7,16 +7,20 @@ import (
 	"io/fs"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 	"sync"
 
+	"github.com/go-git/go-git/v5"
+	http2 "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"gopkg.in/yaml.v2"
 	"webimizer.dev/web/base"
 	"webimizer.dev/web/bytecode/class"
 	"webimizer.dev/web/bytecode/class/method"
 	"webimizer.dev/web/core/server"
 	"webimizer.dev/web/parser"
+	"webimizer.dev/webimizer"
 )
 
 /* Weblang version string */
@@ -45,7 +49,7 @@ func (vm *VM) InitVM(configFile string) {
 	}
 	sourceDir := vm.config.Project.Directories.SourceDir
 	byteCodeDir := vm.config.Project.Directories.BytecodeDir
-	log.Printf("\033[32m[weblang]\033[0m Starting application %v v%v in safe VM environment", vm.config.Project.Name, vm.config.Project.Version)
+	log.Printf("\033[32m[weblang]\033[0m Starting webimizerlication %v v%v in safe VM environment", vm.config.Project.Name, vm.config.Project.Version)
 	err = vm.makeByteCodeDir(byteCodeDir)
 	if err != nil {
 		panic(err.Error())
@@ -86,6 +90,48 @@ func (vm *VM) StartServer() error {
 		}
 		return vm.server.Start()
 	}
+	return nil
+}
+
+func (vm *VM) GitPreperWebHook(gitUrl string, gitUser string, gitToken string, gitLocalDir string, gitWebHook string) error {
+	if _, err := os.Stat(gitLocalDir); os.IsNotExist(err) {
+		_, err = git.PlainClone(gitLocalDir, false, &git.CloneOptions{
+			Auth: &http2.BasicAuth{
+				Username: gitUser,
+				Password: gitToken,
+			},
+			URL:      gitUrl,
+			Progress: os.Stdout,
+		})
+		if err != nil {
+			return err
+		}
+	}
+	http.Handle(gitWebHook, webimizer.HttpHandlerStruct{
+		Handler: webimizer.HttpHandler(func(rw http.ResponseWriter, r *http.Request) {
+			repository, err := git.PlainOpen("/go/bin/resources")
+			if err != nil {
+				log.Fatal(err)
+			}
+			worktree, err := repository.Worktree()
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = worktree.Pull(&git.PullOptions{
+				RemoteName: "origin",
+				Auth: &http2.BasicAuth{
+					Username: gitUser,
+					Password: gitToken,
+				}, Progress: os.Stdout,
+			})
+			if err != nil && err != git.NoErrAlreadyUpToDate {
+				log.Println(err.Error())
+			}
+			fmt.Fprintf(rw, "OK")
+		}),
+		NotAllowHandler: webimizer.HttpNotAllowHandler(httpNotAllowFunc),
+		AllowedMethods:  []string{"POST"},
+	}.Build())
 	return nil
 }
 
