@@ -24,7 +24,7 @@ import (
 )
 
 /* Weblang version string */
-const Version string = "v0.6.26"
+const Version string = "v0.6.27"
 
 /* Main VM struct */
 type VM struct {
@@ -130,8 +130,7 @@ func (vm *VM) GitPreperWebHook(gitUrl string, gitUser string, gitToken string, g
 			}
 			fmt.Fprintf(rw, "OK")
 		}),
-		NotAllowHandler: webimizer.HttpNotAllowHandler(httpNotAllowFunc),
-		AllowedMethods:  []string{"POST"},
+		AllowedMethods: []string{"POST"},
 	}.Build())
 	return nil
 }
