@@ -2,8 +2,21 @@
 
 package web
 
+import (
+	"errors"
+)
+
 /* Install CMS to database and set userName and password */
 func (vm *VM) InstallCmsUser(userName, password string) error {
-	// TODO: implement func
+	var connString string
+	for _, conf := range vm.config.Config {
+		if conf.Name == "monog.connectionString" {
+			connString = conf.Value
+			break
+		}
+	}
+	if connString == "" {
+		return errors.New("mongodb connection string is empty")
+	}
 	return nil
 }
