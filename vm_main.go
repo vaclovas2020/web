@@ -5,7 +5,6 @@ package web
 import (
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -70,7 +69,7 @@ func (vm *VM) InitVM(configFile string) {
 
 /* Parse weblang.yml config file  */
 func (vm *VM) parseConfig(configFile string) error {
-	data, err := ioutil.ReadFile(configFile)
+	data, err := os.ReadFile(configFile)
 	if err != nil {
 		return err
 	}
@@ -149,7 +148,7 @@ func (vm *VM) DefineFunc(className string, methodName string, handler base.Funct
 
 /* parse source file */
 func (vm *VM) loadSourceDir(count *int, sourceDir string, byteCodeDir string, output chan<- string) {
-	files, err := ioutil.ReadDir(sourceDir)
+	files, err := os.ReadDir(sourceDir)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -158,7 +157,11 @@ func (vm *VM) loadSourceDir(count *int, sourceDir string, byteCodeDir string, ou
 			vm.wg.Add(1)
 			*count++
 			log.Printf("\033[32m[weblang]\033[0m Loading %v worker(goroutine) for file '%v/%v' parsing...", *count, sourceDir, file.Name())
-			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, strings.Replace(file.Name(), vm.getFileExt(&file), ".webc", 1)), output)
+			info, err := file.Info()
+			if err != nil {
+				panic(err)
+			}
+			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, strings.Replace(file.Name(), vm.getFileExt(&info), ".webc", 1)), output)
 		} else if file.IsDir() {
 			vm.makeByteCodeDir(fmt.Sprintf("%v/%v", byteCodeDir, file.Name()))
 			vm.loadSourceDir(count, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, file.Name()), output)
@@ -190,7 +193,7 @@ func (vm *VM) monitorWorker(wg *sync.WaitGroup, output chan<- string) {
 /* load source file from disk. Still not yet fully implemented */
 func (vm *VM) parseFileWorker(wg *sync.WaitGroup, fileName string, byteCodeFileName string, output chan<- string) {
 	defer wg.Done()
-	data, err := ioutil.ReadFile(fileName)
+	data, err := os.ReadFile(fileName)
 	if err != nil {
 		panic(err.Error())
 	}

@@ -4,12 +4,12 @@ package generator
 
 import (
 	"crypto/sha256"
-	"io/ioutil"
+	"os"
 )
 
 /* Generate source code file sha256 sum */
 func (generator *ByteCodeGenerator) generateSha256Sum() error {
-	data, err := ioutil.ReadFile(generator.SourceCodeFileName)
+	data, err := os.ReadFile(generator.SourceCodeFileName)
 	if err != nil {
 		return err
 	}

@@ -4,7 +4,7 @@ package generator
 
 import (
 	"encoding/binary"
-	"io/ioutil"
+	"os"
 )
 
 /* Write bytecode data to buffer */
@@ -32,7 +32,7 @@ func (generator *ByteCodeGenerator) writeHeader() error {
 
 /* Write buffer to file */
 func (generator *ByteCodeGenerator) writeBufferToFile() error {
-	err := ioutil.WriteFile(generator.ByteCodeFileName, generator.byteBuffer.Bytes(), 0644)
+	err := os.WriteFile(generator.ByteCodeFileName, generator.byteBuffer.Bytes(), 0644)
 	if err != nil {
 		return err
 	}
