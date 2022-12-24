@@ -48,7 +48,7 @@ func (vm *VM) InitVM(configFile string) {
 	}
 	sourceDir := vm.config.Project.Directories.SourceDir
 	byteCodeDir := vm.config.Project.Directories.BytecodeDir
-	log.Printf("\033[32m[weblang]\033[0m Starting webimizerlication %v v%v in safe VM environment", vm.config.Project.Name, vm.config.Project.Version)
+	log.Printf("\033[32m[weblang]\033[0m Starting application %v v%v in safe VM environment", vm.config.Project.Name, vm.config.Project.Version)
 	err = vm.makeByteCodeDir(byteCodeDir)
 	if err != nil {
 		panic(err.Error())
