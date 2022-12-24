@@ -13,8 +13,5 @@ func (parser *Parser) validateServerParams(objName string, obj *base.Object) err
 	if _, existHost := obj.Attributes["host"]; !existHost {
 		return fmt.Errorf("server object '%v' hasn't required parameter host", objName)
 	}
-	if _, existHost := obj.Attributes["router"]; !existHost {
-		return fmt.Errorf("server object '%v' hasn't required parameter router", objName)
-	}
 	return nil
 }
