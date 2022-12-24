@@ -1,9 +1,10 @@
 module webimizer.dev/web
 
-go 1.18
+go 1.19
 
 require (
 	github.com/go-git/go-git/v5 v5.4.2
+	github.com/google/subcommands v1.2.0
 	github.com/google/uuid v1.3.0
 	gopkg.in/yaml.v2 v2.4.0
 	webimizer.dev/webimizer v1.2.0

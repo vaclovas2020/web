@@ -12,16 +12,10 @@ This is still very early version, so please use only for testing purposes, becau
 ```go
 package main
 
-import (
-	"log"
-
-	"webimizer.dev/web"
-)
+import "webimizer.dev/web/cmd"
 
 func main() {
-	vm := web.VM{}
-	vm.InitVM("weblang.yml")
-	log.Fatal(vm.StartServer())
+	cmd.RegisterAndExecute()
 }
 ```
 ## Weblang debian package

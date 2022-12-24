@@ -1,0 +1,5 @@
+Package: weblang
+Version: 0.6.28
+Maintainer: github.com/vaclovas2020
+Architecture: all
+Description: Weblang programming language CLI application
