@@ -159,7 +159,7 @@ func (vm *VM) loadSourceDir(count *int, sourceDir string, byteCodeDir string, ou
 			log.Printf("\033[32m[weblang]\033[0m Loading %v worker(goroutine) for file '%v/%v' parsing...", *count, sourceDir, file.Name())
 			info, err := file.Info()
 			if err != nil {
-				panic(err)
+				panic(err.Error())
 			}
 			go vm.parseFileWorker(vm.wg, fmt.Sprintf("%v/%v", sourceDir, file.Name()), fmt.Sprintf("%v/%v", byteCodeDir, strings.Replace(file.Name(), vm.getFileExt(&info), ".webc", 1)), output)
 		} else if file.IsDir() {
