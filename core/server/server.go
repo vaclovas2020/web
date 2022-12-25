@@ -27,7 +27,6 @@ type Server struct {
 /* Start server process */
 func (sr Server) Start() error {
 	webimizer.DefaultHTTPHeaders = [][]string{
-		{"content-security-policy", "default-src 'self'"},
 		{"x-content-type-options", "nosniff"},
 		{"x-frame-options", "SAMEORIGIN"},
 		{"x-xss-protection", "1; mode=block"},
