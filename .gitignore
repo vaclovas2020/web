@@ -13,6 +13,6 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-weblang.deb
-weblang/usr/local/bin/weblang
+*.deb
+weblang-deb/usr/local/bin/weblang
 PRIVATE.md
