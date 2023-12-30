@@ -23,7 +23,7 @@ import (
 )
 
 /* Weblang version string */
-const Version string = "v0.8.1"
+const Version string = "v0.8.2"
 
 /* Main VM struct */
 type VM struct {
@@ -39,7 +39,7 @@ type VM struct {
 func (vm *VM) InitVM(configFile string) {
 	fmt.Println("----------------------")
 	fmt.Printf("Welcome to Weblang %v (bytecode version %v)\n\n", Version, class.ByteCodeVersion)
-	fmt.Println("Copyright (c) 2024 Vaclovas Lapinskis. All rights reserved.")
+	fmt.Println("Copyright (c) 2022-2024 Vaclovas Lapinskis. All rights reserved.")
 	fmt.Println("License: BSD-3-Clause License")
 	fmt.Println("----------------------")
 	err := vm.parseConfig(configFile)

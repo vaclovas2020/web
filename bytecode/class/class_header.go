@@ -9,7 +9,7 @@ import (
 )
 
 /* Constant for current Weblang  bytecode version */
-const ByteCodeVersion uint16 = 0x0006
+const ByteCodeVersion uint16 = 0x0007
 const HeaderSize int64 = 75
 
 /* Header struct for Weblang bytecode class file. Binary data block size: 75 bytes */
