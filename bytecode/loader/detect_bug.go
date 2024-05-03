@@ -7,7 +7,7 @@ import (
 )
 
 /* Detect bytecode reader bugs */
-func (loader *Loader) detectBug(classPtr *base.Class, objPtr *base.Object, memory *base.MemoryMap) error {
+func (loader *Loader) detectBug(classPtr *base.Class, _ *base.Object, _ *base.MemoryMap) error {
 	if classPtr == nil {
 		return errors.New("bug detected: classPtr is nil")
 	}

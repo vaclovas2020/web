@@ -63,7 +63,7 @@ func (parser *Parser) parseServerParamName(obj *base.Object, oneParam string, so
 	return paramName, newSourceCode, nil
 }
 
-func (parser *Parser) parseServerParamValue(obj *base.Object, paramName string, oneParam string, sourceCode string, className string) (string, error) {
+func (parser *Parser) parseServerParamValue(_ *base.Object, paramName string, oneParam string, _ string, _ string) (string, error) {
 	var paramValue string
 	paramValueFull := strings.Replace(oneParam, "@"+paramName, "", 1)
 	paramValueStartExp, err := parser.compileRegExp(serverRegExpParamValueStart)

@@ -10,7 +10,7 @@ import (
 )
 
 /* Convert byte[] slice to variable */
-func (loader *Loader) convertAttributeValue(attrName string, attrPtr *attribute.Attribute, classPtr *base.Class, objPtr *base.Object) error {
+func (loader *Loader) convertAttributeValue(attrName string, attrPtr *attribute.Attribute, _ *base.Class, objPtr *base.Object) error {
 	objPtr.AttributesType[attrName] = attrPtr.Header.AttributeType
 	switch attrPtr.Header.AttributeType {
 	case attribute.AttributeType_Int:
