@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"runtime"
 	"strings"
 	"sync"
 
@@ -16,7 +15,6 @@ import (
 	http2 "github.com/go-git/go-git/v5/plumbing/transport/http"
 	"gopkg.in/yaml.v2"
 	"webimizer.dev/web/base"
-	"webimizer.dev/web/bytecode/class"
 	"webimizer.dev/web/bytecode/class/method"
 	"webimizer.dev/web/core/server"
 	"webimizer.dev/web/parser"
@@ -24,7 +22,7 @@ import (
 )
 
 /* Weblang version string */
-const Version string = "weblang0.8.5"
+const Version string = "weblang0.8.6"
 
 /* Main VM struct */
 type VM struct {
@@ -38,11 +36,6 @@ type VM struct {
 // Weblang now require configuration file weblang.yml in your project directory to work correctly.
 // Initialize VM environment. Please provide correct configFile (config file name).
 func (vm *VM) InitVM(configFile string) {
-	fmt.Println("----------------------")
-	fmt.Printf("Welcome to %v %s/%s %s %s (bytecode version %v)\n\n", Version, runtime.GOOS, runtime.GOARCH, runtime.Compiler, runtime.Version(), class.ByteCodeVersion)
-	fmt.Println("Copyright (c) 2022-2024 Vaclovas Lapinskis. All rights reserved.")
-	fmt.Println("License: BSD-3-Clause License")
-	fmt.Println("----------------------")
 	err := vm.parseConfig(configFile)
 	if err != nil {
 		panic(err.Error())

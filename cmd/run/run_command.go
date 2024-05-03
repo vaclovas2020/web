@@ -8,10 +8,14 @@ package run
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
+	"runtime"
+	"time"
 
 	"github.com/google/subcommands"
 	"webimizer.dev/web"
+	"webimizer.dev/web/bytecode/class"
 )
 
 type runCmd struct {
@@ -49,6 +53,15 @@ func (r *runCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) s
 		println("Error: please provide correct -config-file flag")
 		return subcommands.ExitFailure
 	}
+
+	fmt.Println("----------------------")
+	fmt.Printf("Welcome to %v %s/%s %s %s (bytecode version %v)\n\n", web.Version, runtime.GOOS, runtime.GOARCH, runtime.Compiler, runtime.Version(), class.ByteCodeVersion)
+	fmt.Println("Copyright (c) 2022-2024 Vaclovas Lapinskis. All rights reserved.")
+	fmt.Println("License: BSD-3-Clause License")
+	fmt.Println("----------------------")
+
+	time.Sleep(time.Second)
+
 	vm := web.VM{}
 	vm.InitVM(r.configFile)
 	if r.gitUrl != "" && r.gitUser != "" && r.gitToken != "" && r.gitWebHook != "" && r.gitLocalDir != "" {

@@ -1,5 +1,5 @@
 Package: weblang
-Version: 0.8.5
+Version: 0.8.6
 Maintainer: github.com/vaclovas2020
 Architecture: amd64
 Description: Weblang programming language CLI application
