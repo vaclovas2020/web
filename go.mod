@@ -1,6 +1,6 @@
 module webimizer.dev/web
 
-go 1.21
+go 1.22
 
 require (
 	github.com/go-git/go-git/v5 v5.5.2
