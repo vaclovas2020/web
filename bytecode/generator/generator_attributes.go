@@ -50,7 +50,7 @@ func (generator *ByteCodeGenerator) getAttributeSize(attributeName string, el *i
 }
 
 /* Write AttributeName to byteBuffer  */
-func (generator *ByteCodeGenerator) writeAttributeName(header *attribute.AttributeHeader, attributeName string) error {
+func (generator *ByteCodeGenerator) writeAttributeName(_ *attribute.AttributeHeader, attributeName string) error {
 	err := binary.Write(generator.byteBuffer, binary.BigEndian, []byte(attributeName))
 	if err != nil {
 		return err
