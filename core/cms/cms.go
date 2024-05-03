@@ -18,6 +18,7 @@ type CMS struct {
 }
 
 // content is our static web server content.
+//
 //go:embed static/*
 var content embed.FS
 
