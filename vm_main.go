@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"strings"
 	"sync"
 
@@ -23,7 +24,7 @@ import (
 )
 
 /* Weblang version string */
-const Version string = "v0.8.4"
+const Version string = "weblang0.8.5"
 
 /* Main VM struct */
 type VM struct {
@@ -38,7 +39,7 @@ type VM struct {
 // Initialize VM environment. Please provide correct configFile (config file name).
 func (vm *VM) InitVM(configFile string) {
 	fmt.Println("----------------------")
-	fmt.Printf("Welcome to Weblang %v (bytecode version %v)\n\n", Version, class.ByteCodeVersion)
+	fmt.Printf("Welcome to %v %s/%s %s %s (bytecode version %v)\n\n", Version, runtime.GOOS, runtime.GOARCH, runtime.Compiler, runtime.Version(), class.ByteCodeVersion)
 	fmt.Println("Copyright (c) 2022-2024 Vaclovas Lapinskis. All rights reserved.")
 	fmt.Println("License: BSD-3-Clause License")
 	fmt.Println("----------------------")

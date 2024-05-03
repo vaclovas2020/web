@@ -9,6 +9,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"runtime"
 
 	"github.com/google/subcommands"
 	"webimizer.dev/web"
@@ -34,6 +35,6 @@ func (r *versionCmd) SetFlags(f *flag.FlagSet) {
 }
 
 func (r *versionCmd) Execute(_ context.Context, f *flag.FlagSet, _ ...interface{}) subcommands.ExitStatus {
-	fmt.Printf("Version: %v\n", web.Version)
+	fmt.Printf("weblang version %v %s/%s %s %s\n", web.Version, runtime.GOOS, runtime.GOARCH, runtime.Compiler, runtime.Version())
 	return subcommands.ExitSuccess
 }
