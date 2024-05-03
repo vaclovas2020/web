@@ -1,6 +1,6 @@
 /* Copyright (c) 2022 Vaclovas Lapinskis. All rights reserved */
 
-/* Weblang Content Managment System */
+/* Weblang Content Management System */
 package cms
 
 import (
@@ -12,7 +12,7 @@ import (
 	"webimizer.dev/webimizer"
 )
 
-/* Content managment system struct */
+/* Content management system struct */
 type CMS struct {
 	AdminUrl string
 }
