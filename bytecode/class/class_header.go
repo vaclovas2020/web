@@ -32,9 +32,7 @@ func (header *ClassHeader) WriteHeader() error {
 		return err
 	}
 	data := buf.Bytes()
-	for i, v := range data {
-		header.FileFormatText[i] = v
-	}
+	copy(header.FileFormatText[:], data)
 	header.ByteCodeVersion = ByteCodeVersion
 	return nil
 }
